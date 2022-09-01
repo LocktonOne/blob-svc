@@ -1,2 +1,2 @@
-# blob_api
+# blob-svc
 
