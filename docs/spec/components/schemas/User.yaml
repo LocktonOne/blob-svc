@@ -1,0 +1,13 @@
+allOf:
+  - $ref: '#/components/schemas/UserKey'
+  - type: object
+    required: [relationships, attributes]
+    properties:
+      attributes:
+        type: object
+        required:
+          - address
+        properties:
+          address:
+            type: string
+            example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'

@@ -1,0 +1,42 @@
+parameters:
+    - name: id
+      in: path
+      description: Blob identifier
+      required: true
+      schema:
+        type: integer
+get:
+  tags:
+    - Blobs
+  summary: Get blob
+  operationId: getBlob
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/components/schemas/Blob'
+
+delete:
+  tags:
+    - Blobs
+  summary: Delete Blob
+  operationId: deleteBlob
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/components/schemas/Blob'
+    '400':
+      description: invalid request
