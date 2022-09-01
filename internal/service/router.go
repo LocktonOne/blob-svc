@@ -4,6 +4,7 @@ import (
 	"gitlab.com/tokene/blob-svc/internal/config"
 	"gitlab.com/tokene/blob-svc/internal/data/pg"
 	"gitlab.com/tokene/blob-svc/internal/service/handlers"
+	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 
 	"github.com/go-chi/chi"
 	"gitlab.com/distributed_lab/ape"
@@ -16,8 +17,8 @@ func (s *service) router(cfg config.Config) chi.Router {
 		ape.RecoverMiddleware(s.log),
 		ape.LoganMiddleware(s.log),
 		ape.CtxMiddleware(
-			handlers.CtxLog(s.log),
-			handlers.CtxBlobsQ(pg.NewBlobsQ(cfg.DB())),
+			helpers.CtxLog(s.log),
+			helpers.CtxBlobsQ(pg.NewBlobsQ(cfg.DB())),
 		),
 	)
 	r.Route("/integrations/blobs", func(r chi.Router) {

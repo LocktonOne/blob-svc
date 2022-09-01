@@ -5,6 +5,7 @@ import (
 
 	"gitlab.com/tokene/blob-svc/internal/data"
 
+	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
 	"gitlab.com/tokene/blob-svc/resources"
 
@@ -22,15 +23,15 @@ func newBlobsList(blobs []data.Blob) []resources.Blob {
 func GetBlobs(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewGetBLobsListRequest(r)
 	if err != nil {
-		Log(r).WithError(err).Info("invalid request")
+		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	q := BlobsQ(r)
+	q := helpers.BlobsQ(r)
 	ApplyFilter(q, req)
 	blobs, err := q.Select()
 	if err != nil {
-		Log(r).WithError(err).Error("failed to get blobs")
+		helpers.Log(r).WithError(err).Error("failed to get blobs")
 		ape.Render(w, problems.InternalError())
 		return
 	}

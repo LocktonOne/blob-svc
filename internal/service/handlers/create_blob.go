@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"gitlab.com/tokene/blob-svc/internal/data"
+	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
 	"gitlab.com/tokene/blob-svc/resources"
 
@@ -37,7 +38,7 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 
 	req, err := requests.NewCreateBlobRequest(r)
 	if err != nil {
-		Log(r).WithError(err).Info("invalid request")
+		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
@@ -48,9 +49,9 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		BlobContent: string([]byte(req.Data.Attributes.Blob)),
 		Purpose:     req.Data.Attributes.Purpose,
 	}
-	blob, err := BlobsQ(r).Insert(c_blob)
+	blob, err := helpers.BlobsQ(r).Insert(c_blob)
 	if err != nil {
-		Log(r).WithError(err).Error("failed to create blob in DB")
+		helpers.Log(r).WithError(err).Error("failed to create blob in DB")
 		ape.Render(w, problems.InternalError())
 		return
 	}

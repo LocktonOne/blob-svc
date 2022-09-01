@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
 	"gitlab.com/tokene/blob-svc/resources"
 
@@ -14,13 +15,13 @@ func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 
 	req, err := requests.NewGetBlobIDRequest(r)
 	if err != nil {
-		Log(r).WithError(err).Info("invalid request")
+		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	blob, err := BlobsQ(r).FilterByID(req.BlobID).Get()
+	blob, err := helpers.BlobsQ(r).FilterByID(req.BlobID).Get()
 	if err != nil {
-		Log(r).WithError(err).Error("failed to get blob from DB")
+		helpers.Log(r).WithError(err).Error("failed to get blob from DB")
 		ape.Render(w, problems.InternalError())
 		return
 	}
