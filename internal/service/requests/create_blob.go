@@ -30,9 +30,8 @@ func NewCreateBlobRequest(r *http.Request) (CreateBlobRequest, error) {
 func (r *CreateBlobRequest) validate() error {
 	return mergeErrors(validation.Errors{
 		"/data/attributes/blob":               validation.Validate(string([]byte(r.Data.Attributes.Blob)), validation.Required, is.JSON),
-		"/data/attributes/user_address":       validation.Validate(string([]byte(r.Data.Attributes.UserAddress)), validation.Required, validation.Match(helpers.AddressRegexp)),
+		"/data/attributes/user_address":       validation.Validate(string([]byte(r.Data.Relationships.Owner.Data.ID)), validation.Required, validation.Match(helpers.AddressRegexp)),
 		"/data/type":                          validation.Validate(string([]byte(r.Data.Key.Type)), validation.In("blob")),
-		"/data/relationships/owner/data/id":   validation.Validate(string([]byte(r.Data.Relationships.Owner.Data.ID)), validation.Required, validation.Length(1, 255)),
 		"/data/relationships/owner/data/type": validation.Validate(string([]byte(r.Data.Relationships.Owner.Data.Type)), validation.In("user")),
 	},
 	).Filter()

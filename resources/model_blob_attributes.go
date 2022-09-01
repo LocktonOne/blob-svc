@@ -7,7 +7,6 @@ package resources
 import "encoding/json"
 
 type BlobAttributes struct {
-	Blob        json.RawMessage `json:"blob"`
-	Purpose     string          `json:"purpose"`
-	UserAddress string          `json:"user_address"`
+	Blob    json.RawMessage `json:"blob"`
+	Purpose string          `json:"purpose"`
 }
