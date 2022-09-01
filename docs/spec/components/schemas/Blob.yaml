@@ -15,13 +15,17 @@ allOf:
             properties:
               data:
                 type: object
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserKey'
       attributes:
         type: object
         required:
           - blob
           - purpose
+          - user_address
         properties:
+          user_address:
+            type: string
+            example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'
           blob:
             type: object
             format: json.RawMessage

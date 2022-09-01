@@ -125,13 +125,17 @@ components:
                   properties:
                     data:
                       type: object
-                      $ref: '#/components/schemas/User'
+                      $ref: '#/components/schemas/UserKey'
             attributes:
               type: object
               required:
                 - blob
                 - purpose
+                - user_address
               properties:
+                user_address:
+                  type: string
+                  example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'
                 blob:
                   type: object
                   format: json.RawMessage
@@ -150,27 +154,12 @@ components:
         id:
           type: string
           example: '1'
-    User:
-      allOf:
-        - $ref: '#/components/schemas/UserKey'
-        - type: object
-          required:
-            - relationships
-            - attributes
-          properties:
-            attributes:
-              type: object
-              required:
-                - address
-              properties:
-                address:
-                  type: string
-                  example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'
     UserKey:
       type: object
       required:
         - id
         - type
+        - address
       properties:
         id:
           type: string
