@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -38,7 +39,7 @@ func GetDocument(w http.ResponseWriter, r *http.Request) {
 
 	writer := multipart.NewWriter(w)
 
-	//Write document info
+	// Write document info
 	metadata, _ := json.Marshal(result)
 	metadataHeader := textproto.MIMEHeader{}
 	metadataHeader.Set("Content-Type", "application/json; charset=UTF-8")
@@ -46,9 +47,12 @@ func GetDocument(w http.ResponseWriter, r *http.Request) {
 	part.Write(metadata)
 
 	//Write image
+
 	mediaHeader := textproto.MIMEHeader{}
 	mediaHeader.Set("Content-Type", doc.Format)
-	mediaPart, err := writer.CreateFormField("Image")
+	mediaHeader.Add("Content-Length", fmt.Sprint(len(doc.Image)))
+	mediaHeader.Add("Content-Disposition", "form-data; name=\"Image\"; filename=\""+doc.DocumentName+"\"")
+	mediaPart, err := writer.CreatePart(mediaHeader)
 	io.Copy(mediaPart, bytes.NewReader(doc.Image))
 	w.Header().Set("Content-Type", writer.FormDataContentType())
 
