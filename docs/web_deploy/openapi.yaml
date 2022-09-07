@@ -7,7 +7,7 @@ servers:
   - url: 'https://api.demo.tokend.io'
     description: TokenD Developer Environment
 paths:
-  /integrations/blobs:
+  /blobs:
     post:
       tags:
         - Blobs
@@ -45,7 +45,7 @@ paths:
         - $ref: '#/components/parameters/pageLimitParam'
         - $ref: '#/components/parameters/sortingParam'
         - in: query
-          name: 'filter[ownerid]'
+          name: 'filter[address]'
           required: false
           schema:
             type: string
@@ -61,7 +61,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Blob'
-  '/integrations/blobs/{id}':
+  '/blobs/{id}':
     parameters:
       - name: id
         in: path
@@ -93,6 +93,35 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: invalid request
+  /documents:
+    post:
+      tags:
+        - Document
+      summary: Upload Document
+      description: Upload Document
+      operationId: getUploadDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                Document:
+                  type: object
+                  $ref: '#/components/schemas/Document'
+                Image:
+                  type: string
+                  format: base64
+            encoding:
+              profileImage:
+                contentType: 'image/png, image/jpeg'
+        description: Upload Document
+        required: true
+      responses:
+        '200':
+          description: Success
           content:
             application/json:
               schema:
@@ -100,9 +129,7 @@ paths:
                 properties:
                   data:
                     type: object
-                    $ref: '#/components/schemas/Blob'
-        '400':
-          description: invalid request
+                    $ref: '#/components/schemas/DocumentKey'
 components:
   schemas:
     Blob:
@@ -122,10 +149,11 @@ components:
                   type: object
                   required:
                     - data
+                  description: Blob owner
                   properties:
                     data:
                       type: object
-                      $ref: '#/components/schemas/UserKey'
+                      $ref: '#/components/schemas/OwnerKey'
             attributes:
               type: object
               required:
@@ -150,20 +178,58 @@ components:
         id:
           type: string
           example: '1'
-    UserKey:
+    Document:
+      allOf:
+        - $ref: '#/components/schemas/DocumentKey'
+        - type: object
+          required:
+            - attributes
+            - relationships
+          properties:
+            attributes:
+              type: object
+              required:
+                - purpose
+              properties:
+                purpose:
+                  type: string
+                  enum:
+                    - kyc
+            relationships:
+              type: object
+              required:
+                - owner
+              properties:
+                owner:
+                  type: object
+                  required:
+                    - data
+                  description: Document owner
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/OwnerKey'
+    DocumentKey:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          description: document type
+          type: string
+          enum:
+            - passport
+        id:
+          type: string
+          example: '123'
+    OwnerKey:
       type: object
       required:
         - id
-        - type
-        - address
       properties:
         id:
           type: string
+          description: owner address
           example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'
-        type:
-          type: string
-          enum:
-            - user
   parameters:
     pageLimitParam:
       in: query

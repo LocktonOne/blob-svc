@@ -1,0 +1,29 @@
+allOf:
+  - $ref: '#/components/schemas/DocumentKey'
+  - type: object
+    required:
+      - attributes
+      - relationships
+    properties:
+      attributes:
+        type: object
+        required:
+          - purpose
+        properties:
+          purpose:
+            type: string
+            enum:
+              - "kyc"
+      relationships:
+        type: object
+        required:
+          - owner
+        properties:
+          owner:
+            type: object
+            required:
+              - data
+            description: Document owner
+            properties:
+              data:
+                $ref: '#/components/schemas/OwnerKey'

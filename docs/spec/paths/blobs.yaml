@@ -37,7 +37,7 @@ get:
     - $ref: '#/components/parameters/pageLimitParam'
     - $ref: '#/components/parameters/sortingParam'
     - in: query
-      name: 'filter[ownerid]'
+      name: 'filter[address]'
       required: false
       schema:
         type: string

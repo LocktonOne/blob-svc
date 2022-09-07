@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/integrations/blobs": {
+    "/blobs": {
       "post": {
         "tags": [
           "Blobs"
@@ -74,7 +74,7 @@
           },
           {
             "in": "query",
-            "name": "filter[ownerid]",
+            "name": "filter[address]",
             "required": false,
             "schema": {
               "type": "string"
@@ -103,7 +103,7 @@
         }
       }
     },
-    "/integrations/blobs/{id}": {
+    "/blobs/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -148,6 +148,50 @@
         "operationId": "deleteBlob",
         "responses": {
           "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "invalid request"
+          }
+        }
+      }
+    },
+    "/documents": {
+      "post": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Upload Document",
+        "description": "Upload Document",
+        "operationId": "getUploadDocument",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Document": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/Document"
+                  },
+                  "Image": {
+                    "type": "string",
+                    "format": "base64"
+                  }
+                }
+              },
+              "encoding": {
+                "profileImage": {
+                  "contentType": "image/png, image/jpeg"
+                }
+              }
+            }
+          },
+          "description": "Upload Document",
+          "required": true
+        },
+        "responses": {
+          "200": {
             "description": "Success",
             "content": {
               "application/json": {
@@ -156,15 +200,12 @@
                   "properties": {
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/Blob"
+                      "$ref": "#/components/schemas/DocumentKey"
                     }
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "invalid request"
           }
         }
       }
@@ -195,10 +236,11 @@
                     "required": [
                       "data"
                     ],
+                    "description": "Blob owner",
                     "properties": {
                       "data": {
                         "type": "object",
-                        "$ref": "#/components/schemas/UserKey"
+                        "$ref": "#/components/schemas/OwnerKey"
                       }
                     }
                   }
@@ -243,23 +285,85 @@
           }
         }
       },
-      "UserKey": {
+      "Document": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DocumentKey"
+          },
+          {
+            "type": "object",
+            "required": [
+              "attributes",
+              "relationships"
+            ],
+            "properties": {
+              "attributes": {
+                "type": "object",
+                "required": [
+                  "purpose"
+                ],
+                "properties": {
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "kyc"
+                    ]
+                  }
+                }
+              },
+              "relationships": {
+                "type": "object",
+                "required": [
+                  "owner"
+                ],
+                "properties": {
+                  "owner": {
+                    "type": "object",
+                    "required": [
+                      "data"
+                    ],
+                    "description": "Document owner",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/OwnerKey"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "DocumentKey": {
         "type": "object",
         "required": [
-          "id",
-          "type",
-          "address"
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "document type",
+            "type": "string",
+            "enum": [
+              "passport"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "example": "123"
+          }
+        }
+      },
+      "OwnerKey": {
+        "type": "object",
+        "required": [
+          "id"
         ],
         "properties": {
           "id": {
             "type": "string",
+            "description": "owner address",
             "example": "0x750Bd531CEA1f68418DDF2373193CfbD86A69058"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "user"
-            ]
           }
         }
       }
