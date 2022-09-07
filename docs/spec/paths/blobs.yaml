@@ -25,6 +25,21 @@ post:
               data:
                 type: object
                 $ref: '#/components/schemas/Blob'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateBlobError"
+    '500':
+      $ref: "#/components/responses/InternalError"
 
 
 get:
@@ -54,3 +69,14 @@ get:
                 type: array
                 items:
                   $ref: '#/components/schemas/Blob'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
