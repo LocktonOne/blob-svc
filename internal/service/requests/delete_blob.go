@@ -16,8 +16,8 @@ type DeleteBlobRequest struct {
 func NewDeleteBlobRequest(r *http.Request) (DeleteBlobRequest, error) {
 	request := DeleteBlobRequest{}
 	id := chi.URLParam(r, "id")
-	if _, err := strconv.Atoi(id); err == nil {
-		return request, errors.New("id is not a integer")
+	if _, err := strconv.Atoi(id); err != nil {
+		return request, errors.New("id is not an integer")
 	}
 
 	request.BlobID = cast.ToInt64(id)

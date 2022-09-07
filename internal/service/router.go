@@ -32,6 +32,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 	})
 	r.Route("/documents", func(r chi.Router) {
 		r.Post("/", handlers.CreatDocument)
+		r.Get("/{id}", handlers.GetDocument)
 	})
 
 	return r

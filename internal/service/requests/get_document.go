@@ -9,19 +9,19 @@ import (
 	"github.com/spf13/cast"
 )
 
-type GetBlobIDRequest struct {
-	BlobID int64 `url:"-"`
+type GetDocumentRequest struct {
+	DocumentID int64 `url:"-"`
 }
 
-func NewGetBlobIDRequest(r *http.Request) (GetBlobIDRequest, error) {
-	request := GetBlobIDRequest{}
+func NewGetDocumentID(r *http.Request) (GetDocumentRequest, error) {
+	request := GetDocumentRequest{}
 
 	id := chi.URLParam(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return request, errors.New("id is not an integer")
 	}
 
-	request.BlobID = cast.ToInt64(id)
+	request.DocumentID = cast.ToInt64(id)
 
 	return request, nil
 }
