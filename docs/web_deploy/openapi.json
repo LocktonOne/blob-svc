@@ -53,6 +53,30 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CreateBlobError"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
           }
         }
       },
@@ -99,6 +123,24 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -137,6 +179,51 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GetBlobError"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/responses/NotFound"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
           }
         }
       },
@@ -151,7 +238,28 @@
             "description": "Success"
           },
           "400": {
-            "description": "invalid request"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GetBlobError"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
           }
         }
       }
@@ -354,6 +462,195 @@
           }
         }
       },
+      "BadRequestError": {
+        "type": "object",
+        "required": [
+          "title",
+          "status",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short, human-readable summary of the problem",
+            "example": "Bad Request"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation specific to this occurrence of the problem",
+            "example": "Your request was invalid in some way."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code applicable to this problem",
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "type": "string",
+            "description": "Application-specific error code, expressed as a string value",
+            "enum": [
+              "bad_request",
+              "bad_request_data"
+            ]
+          },
+          "meta": {
+            "type": "object",
+            "description": "Object containing non-standard meta-information about the error",
+            "example": {
+              "error": "failed to verify issuer: failed to create a request: invalid url",
+              "error_info": "Issuer check failed."
+            }
+          }
+        }
+      },
+      "CreateBlobError": {
+        "type": "object",
+        "required": [
+          "title",
+          "status",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short, human-readable summary of the problem",
+            "example": "Bad Request"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation specific to this occurrence of the problem",
+            "example": "Some data in the request was invalid. Please refer to the service documentation."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code applicable to this problem",
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "type": "string",
+            "example": "signature_verification_failed",
+            "description": "Application-specific error code, expressed as a string value\n\n\nGeneral Request Codes:\n* \"blob_body_empty\"\n* \"invalid_owner_address\"\n* \"invalid_puprose\"\n* \"invalid_type\""
+          },
+          "meta": {
+            "type": "object",
+            "description": "Object containing non-standard meta-information about the error",
+            "example": {
+              "error": "failed to parse string: unsupported characters"
+            }
+          }
+        }
+      },
+      "GetBlobError": {
+        "type": "object",
+        "required": [
+          "title",
+          "status",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short, human-readable summary of the problem",
+            "example": "Bad Request"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation specific to this occurrence of the problem",
+            "example": "Some data in the request was invalid. Please refer to the service documentation."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code applicable to this problem",
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "type": "string",
+            "example": "signature_verification_failed",
+            "description": "Application-specific error code, expressed as a string value\n\nGeneral Request Codes:\n* \"invalid_id\""
+          },
+          "meta": {
+            "type": "object",
+            "description": "Object containing non-standard meta-information about the error",
+            "example": {
+              "error": "failed to parse string: unsupported characters"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "type": "object",
+        "required": [
+          "title",
+          "status",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short, human-readable summary of the problem",
+            "example": "Internal Error"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation specific to this occurrence of the problem",
+            "example": "Some internal error occurred. Please report this error to service maintainers."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code applicable to this problem",
+            "enum": [
+              500
+            ]
+          },
+          "code": {
+            "type": "string",
+            "description": "Application-specific error code, expressed as a string value",
+            "enum": [
+              "internal_error"
+            ]
+          }
+        }
+      },
+      "NotFoundError": {
+        "type": "object",
+        "required": [
+          "title",
+          "status",
+          "code"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short, human-readable summary of the problem",
+            "example": "Not Found"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Human-readable explanation specific to this occurrence of the problem",
+            "example": "The requested resource could not be found."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code applicable to this problem",
+            "enum": [
+              404
+            ]
+          },
+          "code": {
+            "type": "string",
+            "description": "Application-specific error code, expressed as a string value",
+            "enum": [
+              "not_found"
+            ]
+          }
+        }
+      },
       "OwnerKey": {
         "type": "object",
         "required": [
@@ -364,6 +661,71 @@
             "type": "string",
             "description": "owner address",
             "example": "0x750Bd531CEA1f68418DDF2373193CfbD86A69058"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "errors"
+              ],
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BadRequestError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "errors"
+              ],
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InternalError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "errors"
+              ],
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotFoundError"
+                  }
+                }
+              }
+            }
           }
         }
       }
