@@ -32,3 +32,18 @@ post:
               data:
                 type: object
                 $ref: '#/components/schemas/DocumentKey'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateDocumentError"
+    '500':
+      $ref: "#/components/responses/InternalError"
