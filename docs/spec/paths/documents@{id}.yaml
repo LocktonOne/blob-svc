@@ -1,0 +1,58 @@
+parameters:
+    - name: id
+      in: path
+      description: Blob identifier
+      required: true
+      schema:
+        type: integer
+get:
+  tags:
+    - Documents
+  summary: Get Document
+  description: Get Document
+  operationId: getDocument
+  responses:
+    '200':
+      description: Success
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties: # Request parts
+              Document:
+                type: object
+                $ref: '#/components/schemas/Document'
+              Image:
+                type: string
+                format: base64
+          encoding: # The same level as schema
+            profileImage: # Property name (see above)
+              contentType: image/png, image/jpeg
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetDocumentError"
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/responses/NotFound"
+    '500':
+      $ref: "#/components/responses/InternalError"

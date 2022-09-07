@@ -1,6 +1,6 @@
 post:
   tags:
-    - Document
+    - Documents
   summary: Upload Document
   description: "Upload Document"
   operationId: getUploadDocument
