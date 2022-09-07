@@ -11,6 +11,7 @@ create table documents(
     image Bytea,
     format_file TEXT,
     document_name TEXT,
+    purpose TEXT,
     owner_address BYTEA
 );
 -- +migrate Down

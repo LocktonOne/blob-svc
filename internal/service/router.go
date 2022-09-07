@@ -19,15 +19,19 @@ func (s *service) router(cfg config.Config) chi.Router {
 		ape.CtxMiddleware(
 			helpers.CtxLog(s.log),
 			helpers.CtxBlobsQ(pg.NewBlobsQ(cfg.DB())),
+			helpers.CtxImagesQ(pg.NewImagesQ(cfg.DB())),
 		),
 	)
-	r.Route("/integrations/blobs", func(r chi.Router) {
+	r.Route("/blobs", func(r chi.Router) {
 		r.Get("/", handlers.GetBlobs)
 		r.Post("/", handlers.CreateBlob)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Get("/", handlers.GetBlobByID)
 			r.Delete("/", handlers.DeleteBlob)
 		})
+	})
+	r.Route("/documents", func(r chi.Router) {
+		r.Post("/", handlers.CreatDocument)
 	})
 
 	return r
