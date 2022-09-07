@@ -197,6 +197,21 @@ paths:
                   data:
                     type: object
                     $ref: '#/components/schemas/DocumentKey'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - errors
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreateDocumentError'
+        '500':
+          $ref: '#/components/responses/InternalError'
 components:
   schemas:
     Blob:
@@ -350,6 +365,44 @@ components:
             General Request Codes:
             * "blob_body_empty"
             * "invalid_owner_address"
+            * "invalid_puprose"
+            * "invalid_type"
+        meta:
+          type: object
+          description: Object containing non-standard meta-information about the error
+          example:
+            error: 'failed to parse string: unsupported characters'
+    CreateDocumentError:
+      type: object
+      required:
+        - title
+        - status
+        - code
+      properties:
+        title:
+          type: string
+          description: 'Short, human-readable summary of the problem'
+          example: Bad Request
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+          example: Some data in the request was invalid. Please refer to the service documentation.
+        status:
+          type: integer
+          description: HTTP status code applicable to this problem
+          enum:
+            - 400
+        code:
+          type: string
+          example: signature_verification_failed
+          description: |-
+            Application-specific error code, expressed as a string value
+
+
+            General Request Codes:
+            * "wrong_file type"
+            * "invalid_document_request"
+            * "invalid_address"
             * "invalid_puprose"
             * "invalid_type"
         meta:
