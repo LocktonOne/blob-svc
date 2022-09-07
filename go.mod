@@ -8,7 +8,6 @@ require (
 	github.com/fatih/structs v1.1.0
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
-	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/rubenv/sql-migrate v1.1.2
 	github.com/spf13/cast v1.5.0
@@ -21,12 +20,12 @@ require (
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
-	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
 	github.com/certifi/gocertifi v0.0.0-20200211180108-c7c1fbc02894 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/getsentry/sentry-go v0.7.0 // indirect
 	github.com/go-gorp/gorp/v3 v3.0.2 // indirect
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0 // indirect
 	github.com/google/jsonapi v0.0.0-20200226002910-c8283f632fb7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jmoiron/sqlx v1.2.0 // indirect
