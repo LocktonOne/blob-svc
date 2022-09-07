@@ -1,7 +1,9 @@
 package requests
 
 import (
+	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi"
 	"github.com/spf13/cast"
@@ -13,8 +15,12 @@ type DeleteBlobRequest struct {
 
 func NewDeleteBlobRequest(r *http.Request) (DeleteBlobRequest, error) {
 	request := DeleteBlobRequest{}
+	id := chi.URLParam(r, "id")
+	if _, err := strconv.Atoi(id); err == nil {
+		return request, errors.New("id is not a integer")
+	}
 
-	request.BlobID = cast.ToInt64(chi.URLParam(r, "id"))
+	request.BlobID = cast.ToInt64(id)
 
 	return request, nil
 }

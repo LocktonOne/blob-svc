@@ -24,5 +24,5 @@ func DeleteBlob(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.InternalError())
 		return
 	}
-	ape.Render(w, 200)
+	ape.Render(w, http.StatusAccepted)
 }

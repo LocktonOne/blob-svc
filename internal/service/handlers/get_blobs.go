@@ -43,8 +43,8 @@ func GetBlobs(w http.ResponseWriter, r *http.Request) {
 func ApplyFilter(q data.BlobsQ, request requests.GetBLobsListRequest) {
 	q.Page(request.OffsetPageParams)
 
-	if len(request.FilterOwnerID) > 0 {
-		q.FilterByOwnerID(request.FilterOwnerID...)
+	if len(request.FilterAddress) > 0 {
+		q.FilterByAddress(request.FilterAddress...)
 	}
 
 }

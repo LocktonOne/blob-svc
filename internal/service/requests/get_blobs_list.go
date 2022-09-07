@@ -9,7 +9,7 @@ import (
 
 type GetBLobsListRequest struct {
 	pgdb.OffsetPageParams
-	FilterOwnerID []string `filter:"ownerid"`
+	FilterAddress []string `filter:"address"`
 }
 
 func NewGetBLobsListRequest(r *http.Request) (GetBLobsListRequest, error) {

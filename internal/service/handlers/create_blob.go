@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"gitlab.com/tokene/blob-svc/internal/data"
@@ -14,21 +13,13 @@ import (
 )
 
 func newBlobModel(blob data.Blob) resources.Blob {
-	owner := resources.Relation{
-		Data: &resources.Key{
-			ID:   blob.OwnerID,
-			Type: "user",
-		},
-	}
 	result := resources.Blob{
 		Key: resources.NewKeyInt64(blob.ID, resources.BLOB),
 		Attributes: resources.BlobAttributes{
 			Blob:    []byte(blob.BlobContent),
 			Purpose: blob.Purpose,
 		},
-		Relationships: resources.BlobRelationships{
-			Owner: owner,
-		},
+		Relationships: resources.BlobRelationships{Owner: resources.Relation{Data: &resources.Key{ID: blob.OwnerAddress}}},
 	}
 
 	return result
@@ -42,12 +33,12 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	onwer_id := fmt.Sprintf("%v", req.Data.Relationships.Owner.Data.ID)
+	owner_address := req.Relationships.Owner.Data.ID
 
 	c_blob := data.Blob{
-		OwnerID:     onwer_id,
-		BlobContent: string([]byte(req.Data.Attributes.Blob)),
-		Purpose:     req.Data.Attributes.Purpose,
+		OwnerAddress: owner_address,
+		BlobContent:  string([]byte(req.Attributes.Blob)),
+		Purpose:      req.Attributes.Purpose,
 	}
 	blob, err := helpers.BlobsQ(r).Insert(c_blob)
 	if err != nil {
