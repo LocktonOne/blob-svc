@@ -9,7 +9,10 @@ allOf:
         type: object
         required:
           - purpose
+          - url
         properties:
+          url:
+            type: string
           purpose:
             type: string
             enum:

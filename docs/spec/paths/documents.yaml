@@ -31,7 +31,7 @@ post:
             properties:
               data:
                 type: object
-                $ref: '#/components/schemas/DocumentKey'
+                $ref: '#/components/schemas/Document'
     '400':
       description: Bad Request
       content:

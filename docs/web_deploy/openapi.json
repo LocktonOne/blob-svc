@@ -308,7 +308,7 @@
                   "properties": {
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/DocumentKey"
+                      "$ref": "#/components/schemas/Document"
                     }
                   }
                 }
@@ -347,45 +347,22 @@
         {
           "name": "id",
           "in": "path",
-          "description": "Blob identifier",
+          "description": "Document identifier",
           "required": true,
           "schema": {
             "type": "integer"
           }
         }
       ],
-      "get": {
+      "delete": {
         "tags": [
           "Documents"
         ],
-        "summary": "Get Document",
-        "description": "Get Document",
-        "operationId": "getDocument",
+        "summary": "Delete Document",
+        "operationId": "deleteDocument",
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "multipart/form-data": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "Document": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/Document"
-                    },
-                    "Image": {
-                      "type": "string",
-                      "format": "base64"
-                    }
-                  }
-                },
-                "encoding": {
-                  "profileImage": {
-                    "contentType": "image/png, image/jpeg"
-                  }
-                }
-              }
-            }
+            "description": "Success"
           },
           "400": {
             "description": "Bad Request",
@@ -401,27 +378,6 @@
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/GetDocumentError"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "errors"
-                  ],
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/responses/NotFound"
                       }
                     }
                   }
@@ -525,9 +481,13 @@
               "attributes": {
                 "type": "object",
                 "required": [
-                  "purpose"
+                  "purpose",
+                  "url"
                 ],
                 "properties": {
+                  "url": {
+                    "type": "string"
+                  },
                   "purpose": {
                     "type": "string",
                     "enum": [
