@@ -8,9 +8,8 @@ create table blobs (
 create table documents(
     id SERIAL PRIMARY KEY,
     type TEXT,
-    image Bytea,
-    format_file TEXT,
-    document_name TEXT,
+    name TEXT,
+    image_url TEXT,
     purpose TEXT,
     owner_address BYTEA
 );

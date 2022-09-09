@@ -21,8 +21,7 @@ type Document struct {
 	ID           int64  `db:"id" structs:"-"`
 	Type         string `db:"type" structs:"type"`
 	OwnerAddress string `db:"owner_address" structs:"owner_address"`
-	Image        []byte `db:"image" structs:"image"`
-	Format       string `db:"format_file" structs:"format_file"`
-	DocumentName string `db:"document_name" structs:"document_name"`
+	Name         string `db:"name" structs:"name"`
+	ImageUrl     string `db:"image_url" structs:"image_url"`
 	Purpose      string `db:"purpose" structs:"purpose"`
 }

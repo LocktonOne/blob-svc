@@ -32,7 +32,7 @@ func CtxImagesQ(entry data.ImagesQ) func(context.Context) context.Context {
 		return context.WithValue(ctx, imagesQCtxKey, entry)
 	}
 }
-func IamgesQ(r *http.Request) data.ImagesQ {
+func DocumentsQ(r *http.Request) data.ImagesQ {
 	return r.Context().Value(imagesQCtxKey).(data.ImagesQ).New()
 }
 func BlobsQ(r *http.Request) data.BlobsQ {
