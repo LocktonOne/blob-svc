@@ -33,14 +33,14 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	owner_address := req.Relationships.Owner.Data.ID
+	ownerAddress := req.Relationships.Owner.Data.ID
 
-	c_blob := data.Blob{
-		OwnerAddress: owner_address,
+	cBlob := data.Blob{
+		OwnerAddress: ownerAddress,
 		BlobContent:  string([]byte(req.Attributes.Blob)),
 		Purpose:      req.Attributes.Purpose,
 	}
-	blob, err := helpers.BlobsQ(r).Insert(c_blob)
+	blob, err := helpers.BlobsQ(r).Insert(cBlob)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to create blob in DB")
 		ape.Render(w, problems.InternalError())

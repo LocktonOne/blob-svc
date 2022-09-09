@@ -20,6 +20,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 			helpers.CtxLog(s.log),
 			helpers.CtxBlobsQ(pg.NewBlobsQ(cfg.DB())),
 			helpers.CtxImagesQ(pg.NewImagesQ(cfg.DB())),
+			helpers.CtxAwsConfig(cfg.AWSConfig()),
 		),
 	)
 	r.Route("/blobs", func(r chi.Router) {

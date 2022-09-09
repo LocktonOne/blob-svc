@@ -12,13 +12,13 @@ import (
 
 func DeleteBlob(w http.ResponseWriter, r *http.Request) {
 
-	del_req, err := requests.NewGetBlobIDRequest(r)
+	delReq, err := requests.NewGetBlobIDRequest(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	err = helpers.BlobsQ(r).DelById(del_req.BlobID)
+	err = helpers.BlobsQ(r).DelById(delReq.BlobID)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to delete blob from DB")
 		ape.Render(w, problems.InternalError())

@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"net/http"
-	"net/url"
 	"strings"
-	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/google/uuid"
-	"github.com/minio/minio-go/v7"
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
 
@@ -34,62 +36,50 @@ func CreatDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	file, h, err := r.FormFile("Image")
+	awsCfg := helpers.AwsConfig(r)
 
+	//Create session
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region:      aws.String("eu-central-1"),
+		Credentials: credentials.NewStaticCredentials(awsCfg.AccessKeyID, awsCfg.SecretKeyID, ""),
+		DisableSSL:  &awsCfg.SslDisable,
+	}))
+
+	uploader := s3manager.NewUploader(sess)
+
+	//File data
+	contentType := h.Header.Get("Content-Type")
+	objectName := uuid.New().String() + "." + strings.Split(contentType, "/")[1]
+
+	// Upload the file to S3.
+	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(awsCfg.Bucket),
+		Key:    aws.String(objectName),
+		Body:   file,
+	})
 	if err != nil {
-		ape.RenderErr(w, problems.BadRequest(err)...)
+		helpers.Log(r).WithError(err).Info("cannot upload file")
+		ape.Render(w, problems.InternalError())
 		return
 	}
 
-	//Create minio client
-	minioClient, err := helpers.NewMinioClient()
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("cannot create client")
-		ape.RenderErr(w, problems.InternalError())
-	}
-
-	bucketName := "documents-kyc0123" // TODO cfg name
-	location := "eu-central-1"        // TODO cfg location
-
-	//Check of bucket
-	err = minioClient.MakeBucket(r.Context(), bucketName, minio.MakeBucketOptions{Region: location})
-	if err != nil {
-		// Check to see if we already own this bucket
-		exists, errBucketExists := minioClient.BucketExists(r.Context(), bucketName)
-		if errBucketExists != nil || !exists {
-			helpers.Log(r).WithError(err).Info("cannot connect to the bucket")
-			ape.Render(w, problems.InternalError())
-			return
-		}
-	}
-	helpers.Log(r).Debug("connected to the bucket")
-
-	//document data
-	fileName := uuid.New().String()
-	contentType := h.Header.Get("Content-Type")
-	objectName := fileName + "." + strings.Split(contentType, "/")[1]
-
-	// Upload the document file with PutObject
-	_, err = minioClient.PutObject(r.Context(), bucketName, objectName, file, h.Size, minio.PutObjectOptions{ContentType: contentType})
-
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("cannot connect to the bucket")
-		ape.RenderErr(w, problems.InternalError())
-	}
-
 	//Get url
-	reqParams := make(url.Values)
-	reqParams.Set("response-content-disposition", "attachment; filename=\""+objectName+"\"")
-
-	// Generates a presigned url which expires in a day.
-	presignedURL, err := minioClient.PresignedGetObject(r.Context(), bucketName, objectName, time.Second*24*60*60, reqParams)
-
+	svc := s3.New(sess)
+	getObjectReq, _ := svc.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(awsCfg.Bucket),
+		Key:    aws.String(objectName),
+	})
+	url, err := getObjectReq.Presign(awsCfg.Expiration)
 	if err != nil {
-		helpers.Log(r).WithError(err).Info("cannot connect to the bucket")
-		ape.RenderErr(w, problems.InternalError())
+		helpers.Log(r).WithError(err).Info("cannot get object's url")
+		ape.Render(w, problems.InternalError())
+		return
 	}
+
+	//Insert to db
 	docImage := data.Document{
 		Type:         string(req.Type),
-		ImageUrl:     presignedURL.String(),
+		ImageUrl:     url,
 		OwnerAddress: req.Relationships.Owner.Data.ID,
 		Purpose:      req.Attributes.Purpose,
 		Name:         objectName,

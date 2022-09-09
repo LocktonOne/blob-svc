@@ -13,3 +13,10 @@ cop:
   upstream: "http://..."
   service_name: blob_api
   service_port: 80
+
+aws:
+	access_key: aws-user-access-key
+	secret_key: aws-user-secret-key
+	bucket: bucket-name   
+	expiration: 1h
+	ssldisable: true

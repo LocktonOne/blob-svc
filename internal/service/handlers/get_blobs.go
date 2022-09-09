@@ -27,9 +27,11 @@ func GetBlobs(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
+
 	q := helpers.BlobsQ(r)
 	ApplyFilter(q, req)
 	blobs, err := q.Select()
+
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get blobs")
 		ape.Render(w, problems.InternalError())
@@ -40,6 +42,7 @@ func GetBlobs(w http.ResponseWriter, r *http.Request) {
 	}
 	ape.Render(w, result)
 }
+
 func ApplyFilter(q data.BlobsQ, request requests.GetBLobsListRequest) {
 	q.Page(request.OffsetPageParams)
 
