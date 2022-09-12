@@ -28,7 +28,7 @@ func newDocumentModel(document data.Document) resources.Document {
 	return result
 }
 
-func CreatDocument(w http.ResponseWriter, r *http.Request) {
+func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewСreateDocumentRequest(r)
 	if err != nil {
 		ape.RenderErr(w, problems.BadRequest(err)...)
