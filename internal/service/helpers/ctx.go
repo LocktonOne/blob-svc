@@ -15,7 +15,7 @@ type ctxKey int
 const (
 	logCtxKey ctxKey = iota
 	blobsQCtxKey
-	imagesQCtxKey
+	docsQCtxKey
 	awsCfgKey
 )
 
@@ -29,9 +29,9 @@ func CtxBlobsQ(entry data.BlobsQ) func(context.Context) context.Context {
 		return context.WithValue(ctx, blobsQCtxKey, entry)
 	}
 }
-func CtxImagesQ(entry data.ImagesQ) func(context.Context) context.Context {
+func CtxDocumentsQ(entry data.ImagesQ) func(context.Context) context.Context {
 	return func(ctx context.Context) context.Context {
-		return context.WithValue(ctx, imagesQCtxKey, entry)
+		return context.WithValue(ctx, docsQCtxKey, entry)
 	}
 }
 func CtxAwsConfig(entry *config.AWSConfig) func(context.Context) context.Context {
@@ -43,7 +43,7 @@ func AwsConfig(r *http.Request) *config.AWSConfig {
 	return r.Context().Value(awsCfgKey).(*config.AWSConfig)
 }
 func DocumentsQ(r *http.Request) data.ImagesQ {
-	return r.Context().Value(imagesQCtxKey).(data.ImagesQ).New()
+	return r.Context().Value(docsQCtxKey).(data.ImagesQ).New()
 }
 func BlobsQ(r *http.Request) data.BlobsQ {
 	return r.Context().Value(blobsQCtxKey).(data.BlobsQ).New()
