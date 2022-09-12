@@ -17,6 +17,7 @@ cop:
 aws:
 	access_key: aws-user-access-key
 	secret_key: aws-user-secret-key
-	bucket: bucket-name   
+	bucket: bucket-name
+  region: region
 	expiration: 1h
 	ssldisable: true

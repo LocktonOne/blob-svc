@@ -5,8 +5,6 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/google/uuid"
@@ -39,11 +37,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	awsCfg := helpers.AwsConfig(r)
 
 	//Create session
-	sess := session.Must(session.NewSession(&aws.Config{
-		Region:      aws.String("eu-central-1"),
-		Credentials: credentials.NewStaticCredentials(awsCfg.AccessKeyID, awsCfg.SecretKeyID, ""),
-		DisableSSL:  &awsCfg.SslDisable,
-	}))
+	sess := helpers.NewAwsSession(r)
 
 	uploader := s3manager.NewUploader(sess)
 

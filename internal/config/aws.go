@@ -19,6 +19,7 @@ type AWSConfig struct {
 	Bucket      string        `fig:"bucket,required"`
 	Expiration  time.Duration `fig:"expiration,required"`
 	SslDisable  bool          `fig:"ssldisable,required"`
+	Region      string        `fig:"region,required"`
 }
 
 func NewAWSConfiger(getter kv.Getter) AWSConfiger {
