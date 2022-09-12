@@ -18,7 +18,7 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	err = helpers.BlobsQ(r).DelById(delReq.DocumentID)
+	err = helpers.DocumentsQ(r).DelById(delReq.DocumentID)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to delete blob from DB")
 		ape.Render(w, problems.InternalError())
