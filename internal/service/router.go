@@ -19,7 +19,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 		ape.CtxMiddleware(
 			helpers.CtxLog(s.log),
 			helpers.CtxBlobsQ(pg.NewBlobsQ(cfg.DB())),
-			helpers.CtxDocumentsQ(pg.NewImagesQ(cfg.DB())),
+			helpers.CtxDocumentsQ(pg.NewDocumentsQ(cfg.DB())),
 			helpers.CtxAwsConfig(cfg.AWSConfig()),
 		),
 	)

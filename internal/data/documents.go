@@ -4,17 +4,17 @@ import (
 	"gitlab.com/distributed_lab/kit/pgdb"
 )
 
-type ImagesQ interface {
-	New() ImagesQ
+type DocumentsQ interface {
+	New() DocumentsQ
 
 	Get() (*Document, error)
 	Select() ([]Document, error)
 
 	Insert(data Document) (Document, error)
-	Page(pageParams pgdb.OffsetPageParams) ImagesQ
+	Page(pageParams pgdb.OffsetPageParams) DocumentsQ
 	DelById(id ...int64) error
-	FilterByAddress(id ...string) ImagesQ
-	FilterByID(id ...int64) ImagesQ
+	FilterByAddress(id ...string) DocumentsQ
+	FilterByID(id ...int64) DocumentsQ
 }
 
 type Document struct {

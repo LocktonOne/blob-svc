@@ -76,7 +76,7 @@ func CreatDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//Insert to db
+	//Insert into db
 	docImage := data.Document{
 		Type:         string(req.Type),
 		ImageUrl:     url,

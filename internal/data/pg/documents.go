@@ -13,23 +13,23 @@ import (
 
 const documentsTableName = "documents"
 
-func NewImagesQ(db *pgdb.DB) data.ImagesQ {
-	return &ImagesQ{
+func NewDocumentsQ(db *pgdb.DB) data.DocumentsQ {
+	return &DocumentsQ{
 		db:  db.Clone(),
 		sql: sq.Select("b.*").From(fmt.Sprintf("%s as b", documentsTableName)),
 	}
 }
 
-type ImagesQ struct {
+type DocumentsQ struct {
 	db  *pgdb.DB
 	sql sq.SelectBuilder
 }
 
-func (q *ImagesQ) New() data.ImagesQ {
-	return NewImagesQ(q.db)
+func (q *DocumentsQ) New() data.DocumentsQ {
+	return NewDocumentsQ(q.db)
 }
 
-func (q *ImagesQ) Get() (*data.Document, error) {
+func (q *DocumentsQ) Get() (*data.Document, error) {
 	var result data.Document
 	err := q.db.Get(&result, q.sql)
 	if err == sql.ErrNoRows {
@@ -39,13 +39,13 @@ func (q *ImagesQ) Get() (*data.Document, error) {
 	return &result, err
 }
 
-func (q *ImagesQ) Select() ([]data.Document, error) {
+func (q *DocumentsQ) Select() ([]data.Document, error) {
 	var result []data.Document
 	err := q.db.Select(&result, q.sql)
 	return result, err
 }
 
-func (q *ImagesQ) Insert(value data.Document) (data.Document, error) {
+func (q *DocumentsQ) Insert(value data.Document) (data.Document, error) {
 	clauses := structs.Map(value)
 
 	var result data.Document
@@ -54,21 +54,21 @@ func (q *ImagesQ) Insert(value data.Document) (data.Document, error) {
 
 	return result, err
 }
-func (q *ImagesQ) Page(pageParams pgdb.OffsetPageParams) data.ImagesQ {
+func (q *DocumentsQ) Page(pageParams pgdb.OffsetPageParams) data.DocumentsQ {
 	q.sql = pageParams.ApplyTo(q.sql, "id")
 	return q
 }
 
-func (q *ImagesQ) FilterByAddress(ids ...string) data.ImagesQ {
+func (q *DocumentsQ) FilterByAddress(ids ...string) data.DocumentsQ {
 	q.sql = q.sql.Where(sq.Eq{"b.owner_address": ids})
 	return q
 }
-func (q *ImagesQ) DelById(ids ...int64) error {
+func (q *DocumentsQ) DelById(ids ...int64) error {
 	s := sq.Delete(documentsTableName).Where(sq.Eq{"id": ids})
 	err := q.db.Exec(s)
 	return err
 }
-func (q *ImagesQ) FilterByID(ids ...int64) data.ImagesQ {
+func (q *DocumentsQ) FilterByID(ids ...int64) data.DocumentsQ {
 	q.sql = q.sql.Where(sq.Eq{"b.id": ids})
 	return q
 }

@@ -29,7 +29,7 @@ func CtxBlobsQ(entry data.BlobsQ) func(context.Context) context.Context {
 		return context.WithValue(ctx, blobsQCtxKey, entry)
 	}
 }
-func CtxDocumentsQ(entry data.ImagesQ) func(context.Context) context.Context {
+func CtxDocumentsQ(entry data.DocumentsQ) func(context.Context) context.Context {
 	return func(ctx context.Context) context.Context {
 		return context.WithValue(ctx, docsQCtxKey, entry)
 	}
@@ -42,8 +42,8 @@ func CtxAwsConfig(entry *config.AWSConfig) func(context.Context) context.Context
 func AwsConfig(r *http.Request) *config.AWSConfig {
 	return r.Context().Value(awsCfgKey).(*config.AWSConfig)
 }
-func DocumentsQ(r *http.Request) data.ImagesQ {
-	return r.Context().Value(docsQCtxKey).(data.ImagesQ).New()
+func DocumentsQ(r *http.Request) data.DocumentsQ {
+	return r.Context().Value(docsQCtxKey).(data.DocumentsQ).New()
 }
 func BlobsQ(r *http.Request) data.BlobsQ {
 	return r.Context().Value(blobsQCtxKey).(data.BlobsQ).New()
