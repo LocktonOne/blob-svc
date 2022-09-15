@@ -15,6 +15,7 @@ import (
 	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
 	"gitlab.com/tokene/blob-svc/resources"
+	"gitlab.com/tokene/doorman/connector"
 )
 
 func newDocumentModel(document data.Document) resources.Document {
@@ -30,6 +31,24 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewСreateDocumentRequest(r)
 	if err != nil {
 		ape.RenderErr(w, problems.BadRequest(err)...)
+		return
+	}
+
+	doorman := connector.NewConnectorMockKyc(helpers.DoormanConfig(r).ServiceUrl)
+
+	token, err := doorman.GetAuthToken(r)
+	if err != nil {
+		helpers.Log(r).WithError(err).Info("invalid auth token")
+		ape.RenderErr(w, problems.Unauthorized())
+		return
+	}
+
+	//TODO add check permission
+
+	validation, err := doorman.ValidateJwt(token, req.Relationships.Owner.Data.ID)
+	if err != nil || !validation {
+		helpers.Log(r).WithError(err).Info("invalid auth token")
+		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 

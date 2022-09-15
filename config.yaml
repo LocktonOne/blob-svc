@@ -15,9 +15,12 @@ cop:
   service_port: 80
 
 aws:
-	access_key: aws-user-access-key
-	secret_key: aws-user-secret-key
-	bucket: bucket-name
+  access_key: aws-user-access-key
+  secret_key: aws-user-secret-key
+  bucket: bucket-name
   region: region
-	expiration: 1h
-	ssldisable: true
+  expiration: 1h
+  ssldisable: true
+
+doorman:
+  service_url: "dorman-url"

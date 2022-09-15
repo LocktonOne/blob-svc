@@ -10,6 +10,8 @@ delete:
     - Documents
   summary: Delete Document
   operationId: deleteDocument
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

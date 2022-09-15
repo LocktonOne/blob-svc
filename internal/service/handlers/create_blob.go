@@ -3,13 +3,13 @@ package handlers
 import (
 	"net/http"
 
+	"gitlab.com/distributed_lab/ape"
+	"gitlab.com/distributed_lab/ape/problems"
 	"gitlab.com/tokene/blob-svc/internal/data"
 	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
 	"gitlab.com/tokene/blob-svc/resources"
-
-	"gitlab.com/distributed_lab/ape"
-	"gitlab.com/distributed_lab/ape/problems"
+	"gitlab.com/tokene/doorman/connector"
 )
 
 func newBlobModel(blob data.Blob) resources.Blob {
@@ -34,6 +34,24 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ownerAddress := req.Relationships.Owner.Data.ID
+
+	doorman := connector.NewConnectorMockKyc(helpers.DoormanConfig(r).ServiceUrl)
+
+	token, err := doorman.GetAuthToken(r)
+	if err != nil {
+		helpers.Log(r).WithError(err).Info("invalid auth token")
+		ape.RenderErr(w, problems.Unauthorized())
+		return
+	}
+
+	//TODO add check permission
+
+	validation, err := doorman.ValidateJwt(token, ownerAddress)
+	if err != nil || !validation {
+		helpers.Log(r).WithError(err).Info("invalid auth token")
+		ape.RenderErr(w, problems.Unauthorized())
+		return
+	}
 
 	cBlob := data.Blob{
 		OwnerAddress: ownerAddress,

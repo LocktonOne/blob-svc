@@ -3,6 +3,8 @@ post:
     - Blobs
   summary: Create blob
   operationId: createBlob
+  security:
+    - bearerAuth: []
   requestBody:
     content:
       application/json:
@@ -47,6 +49,8 @@ get:
     - Blobs
   summary: Get blobs list
   operationId: getBlobsList
+  security:
+    - bearerAuth: []
   parameters:
     - $ref: '#/components/parameters/pageNumberParam'
     - $ref: '#/components/parameters/pageLimitParam'

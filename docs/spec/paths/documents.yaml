@@ -4,6 +4,8 @@ post:
   summary: Upload Document
   description: "Upload Document"
   operationId: getUploadDocument
+  security:
+    - bearerAuth: []
   requestBody:
     content:
       multipart/form-data:

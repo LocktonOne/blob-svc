@@ -28,6 +28,8 @@ func GetBlobs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//TODO add check permission
+
 	q := helpers.BlobsQ(r)
 	ApplyFilter(q, req)
 	blobs, err := q.Select()

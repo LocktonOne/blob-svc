@@ -17,6 +17,7 @@ const (
 	blobsQCtxKey
 	docsQCtxKey
 	awsCfgKey
+	doormanConfigCtxKey
 )
 
 func CtxLog(entry *logan.Entry) func(context.Context) context.Context {
@@ -50,4 +51,12 @@ func BlobsQ(r *http.Request) data.BlobsQ {
 }
 func Log(r *http.Request) *logan.Entry {
 	return r.Context().Value(logCtxKey).(*logan.Entry)
+}
+func CtxDoormanConfig(entry *config.DoormanConfig) func(context.Context) context.Context {
+	return func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, doormanConfigCtxKey, entry)
+	}
+}
+func DoormanConfig(r *http.Request) *config.DoormanConfig {
+	return r.Context().Value(doormanConfigCtxKey).(*config.DoormanConfig)
 }

@@ -14,6 +14,7 @@ type Config interface {
 	types.Copuser
 	comfig.Listenerer
 	AWSConfiger
+	DoormanConfiger
 }
 
 type config struct {
@@ -23,15 +24,17 @@ type config struct {
 	comfig.Listenerer
 	getter kv.Getter
 	AWSConfiger
+	DoormanConfiger
 }
 
 func New(getter kv.Getter) Config {
 	return &config{
-		getter:      getter,
-		Databaser:   pgdb.NewDatabaser(getter),
-		Copuser:     copus.NewCopuser(getter),
-		Listenerer:  comfig.NewListenerer(getter),
-		AWSConfiger: NewAWSConfiger(getter),
-		Logger:      comfig.NewLogger(getter, comfig.LoggerOpts{}),
+		getter:          getter,
+		Databaser:       pgdb.NewDatabaser(getter),
+		Copuser:         copus.NewCopuser(getter),
+		Listenerer:      comfig.NewListenerer(getter),
+		AWSConfiger:     NewAWSConfiger(getter),
+		Logger:          comfig.NewLogger(getter, comfig.LoggerOpts{}),
+		DoormanConfiger: NewDoormanConfiger(getter),
 	}
 }
