@@ -38,7 +38,6 @@ func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.NotFound())
 		return
 	}
-	//TODO add check permission
 
 	_, err = doorman.ValidateJwt(token)
 	if err != nil {

@@ -37,7 +37,13 @@ func DeleteBlob(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.NotFound())
 		return
 	}
-	//TODO add check permission
+
+	permission, err := doorman.CheckPermission(blob.OwnerAddress, token)
+	if err != nil || !permission {
+		helpers.Log(r).WithError(err).Info("user does not have permission")
+		ape.RenderErr(w, problems.Unauthorized())
+		return
+	}
 
 	_, err = doorman.ValidateJwt(token)
 	if err != nil {
