@@ -41,5 +41,5 @@ func (c *doormanConfig) DoormanConfig() *DoormanConfig {
 	}).(*DoormanConfig)
 }
 func (c *doormanConfig) DormanConnector() connector.ConnectorI {
-	return connector.NewConnectorMockKyc(c.DoormanConfig().ServiceUrl) //remove mock
+	return connector.NewConnectorMockKyc(c.DoormanConfig().ServiceUrl) //TODO remove mock
 }
