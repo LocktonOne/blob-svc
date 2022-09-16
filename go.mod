@@ -18,7 +18,7 @@ require (
 	gitlab.com/distributed_lab/kit v1.11.1
 	gitlab.com/distributed_lab/logan v3.8.1+incompatible
 	gitlab.com/distributed_lab/urlval v3.0.0+incompatible
-	gitlab.com/tokene/doorman v0.0.0-20220915141726-dd86dfab37c4
+	gitlab.com/tokene/doorman v0.0.0-20220916133316-db56e5b2ac8a
 )
 
 require (

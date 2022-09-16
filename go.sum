@@ -466,6 +466,8 @@ gitlab.com/distributed_lab/urlval v3.0.0+incompatible h1:OWU3CcZU+z0BVooufOSQFO9
 gitlab.com/distributed_lab/urlval v3.0.0+incompatible/go.mod h1:cKnUlnZCHUuke/l95YLvW5JoGC2yn53HVgF9rt1WiIg=
 gitlab.com/tokene/doorman v0.0.0-20220915141726-dd86dfab37c4 h1:pOkaBm17RGrZDov1GEZgq/TLshdYImEYYENG8xpb8Es=
 gitlab.com/tokene/doorman v0.0.0-20220915141726-dd86dfab37c4/go.mod h1:GyRnHdJlxS4KYeJ5m9DJAm8dy/MGj4MC3vIn9bbuuQ8=
+gitlab.com/tokene/doorman v0.0.0-20220916133316-db56e5b2ac8a h1:obzEwpoUD5ecDT52nTAU6ik/KYsw/jP7pOdwgYerkyk=
+gitlab.com/tokene/doorman v0.0.0-20220916133316-db56e5b2ac8a/go.mod h1:GyRnHdJlxS4KYeJ5m9DJAm8dy/MGj4MC3vIn9bbuuQ8=
 go.etcd.io/etcd/api/v3 v3.5.0/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
 go.etcd.io/etcd/client/pkg/v3 v3.5.0/go.mod h1:IJHfcCEKxYu1Os13ZdwCwIUTUVGYTSAM3YSwc9/Ac1g=
 go.etcd.io/etcd/client/v2 v2.305.0/go.mod h1:h9puh54ZTgAKtEbut2oe9P4L/oqKCVB6xsXlzd7alYQ=

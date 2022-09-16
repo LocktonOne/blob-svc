@@ -5,7 +5,6 @@ import (
 
 	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
-	"gitlab.com/tokene/doorman/connector"
 
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
@@ -19,7 +18,7 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	doorman := connector.NewConnectorMockKyc(helpers.DoormanConfig(r).ServiceUrl) //remove mockremove
+	doorman := helpers.DoormanConnector(r)
 
 	token, err := doorman.GetAuthToken(r)
 	if err != nil {
@@ -40,8 +39,8 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 	}
 	//TODO add check permission
 
-	validation, err := doorman.ValidateJwt(token, document.OwnerAddress)
-	if err != nil || !validation {
+	_, err = doorman.ValidateJwt(token)
+	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
 		return

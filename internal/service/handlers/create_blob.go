@@ -9,7 +9,6 @@ import (
 	"gitlab.com/tokene/blob-svc/internal/service/helpers"
 	"gitlab.com/tokene/blob-svc/internal/service/requests"
 	"gitlab.com/tokene/blob-svc/resources"
-	"gitlab.com/tokene/doorman/connector"
 )
 
 func newBlobModel(blob data.Blob) resources.Blob {
@@ -35,7 +34,7 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 	}
 	ownerAddress := req.Relationships.Owner.Data.ID
 
-	doorman := connector.NewConnectorMockKyc(helpers.DoormanConfig(r).ServiceUrl)
+	doorman := helpers.DoormanConnector(r)
 
 	token, err := doorman.GetAuthToken(r)
 	if err != nil {
@@ -46,8 +45,8 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 
 	//TODO add check permission
 
-	validation, err := doorman.ValidateJwt(token, ownerAddress)
-	if err != nil || !validation {
+	_, err = doorman.ValidateJwt(token)
+	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
 		return

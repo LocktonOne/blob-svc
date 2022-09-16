@@ -21,7 +21,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 			helpers.CtxBlobsQ(pg.NewBlobsQ(cfg.DB())),
 			helpers.CtxDocumentsQ(pg.NewDocumentsQ(cfg.DB())),
 			helpers.CtxAwsConfig(cfg.AWSConfig()),
-			helpers.CtxDoormanConfig(cfg.DoormanConfig()),
+			helpers.CtxDoormanConnector(cfg.DormanConnector()),
 		),
 	)
 	r.Route("/blobs", func(r chi.Router) {

@@ -5,10 +5,12 @@ import (
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3/errors"
+	"gitlab.com/tokene/doorman/connector"
 )
 
 type DoormanConfiger interface {
 	DoormanConfig() *DoormanConfig
+	DormanConnector() connector.ConnectorI
 }
 
 type DoormanConfig struct {
@@ -37,4 +39,7 @@ func (c *doormanConfig) DoormanConfig() *DoormanConfig {
 
 		return &config
 	}).(*DoormanConfig)
+}
+func (c *doormanConfig) DormanConnector() connector.ConnectorI {
+	return connector.NewConnectorMockKyc(c.DoormanConfig().ServiceUrl) //remove mock
 }
