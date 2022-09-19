@@ -27,6 +27,12 @@ func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
+	_, err = doorman.ValidateJwt(token)
+	if err != nil {
+		helpers.Log(r).WithError(err).Info("invalid auth token")
+		ape.RenderErr(w, problems.Unauthorized())
+		return
+	}
 
 	blob, err := helpers.BlobsQ(r).FilterByID(req.BlobID).Get()
 	if err != nil {
@@ -36,13 +42,6 @@ func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 	}
 	if blob == nil {
 		ape.Render(w, problems.NotFound())
-		return
-	}
-
-	_, err = doorman.ValidateJwt(token)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 

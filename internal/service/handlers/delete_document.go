@@ -18,14 +18,6 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	doorman := helpers.DoormanConnector(r)
-
-	token, err := doorman.GetAuthToken(r)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
 
 	document, err := helpers.DocumentsQ(r).FilterByID(delReq.DocumentID).Get()
 	if err != nil {
@@ -37,19 +29,14 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.NotFound())
 		return
 	}
-	permission, err := doorman.CheckPermission(document.OwnerAddress, token)
+
+	permission, err := helpers.Authorization(r, document.OwnerAddress)
 	if err != nil || !permission {
 		helpers.Log(r).WithError(err).Info("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
-	_, err = doorman.ValidateJwt(token)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
 	helpers.DeleteItem(helpers.NewAwsSession(r), &helpers.AwsConfig(r).Bucket, &document.Name)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("failed to delete document from s3 bucket")

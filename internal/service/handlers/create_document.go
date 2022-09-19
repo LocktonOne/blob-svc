@@ -33,25 +33,9 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	doorman := helpers.DoormanConnector(r)
-
-	token, err := doorman.GetAuthToken(r)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-
-	permission, err := doorman.CheckPermission(req.Relationships.Owner.Data.ID, token)
+	permission, err := helpers.Authorization(r, req.Relationships.Owner.Data.ID)
 	if err != nil || !permission {
 		helpers.Log(r).WithError(err).Info("user does not have permission")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-
-	_, err = doorman.ValidateJwt(token)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}

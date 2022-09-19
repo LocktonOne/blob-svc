@@ -34,24 +34,9 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 	}
 	ownerAddress := req.Relationships.Owner.Data.ID
 
-	doorman := helpers.DoormanConnector(r)
-
-	token, err := doorman.GetAuthToken(r)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-
-	permission, err := doorman.CheckPermission(ownerAddress, token)
+	permission, err := helpers.Authorization(r, ownerAddress)
 	if err != nil || !permission {
 		helpers.Log(r).WithError(err).Info("user does not have permission")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-	_, err = doorman.ValidateJwt(token)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}

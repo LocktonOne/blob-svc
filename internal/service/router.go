@@ -25,7 +25,6 @@ func (s *service) router(cfg config.Config) chi.Router {
 		),
 	)
 	r.Route("/blobs", func(r chi.Router) {
-		r.Get("/", handlers.GetBlobs)
 		r.Post("/", handlers.CreateBlob)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Get("/", handlers.GetBlobByID)
