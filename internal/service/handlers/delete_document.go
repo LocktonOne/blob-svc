@@ -49,5 +49,5 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.InternalError())
 		return
 	}
-	ape.Render(w, http.StatusOK)
+	w.WriteHeader(http.StatusNoContent)
 }
