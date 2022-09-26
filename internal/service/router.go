@@ -33,8 +33,10 @@ func (s *service) router(cfg config.Config) chi.Router {
 	})
 	r.Route("/documents", func(r chi.Router) {
 		r.Post("/", handlers.CreateDocument)
-		r.Delete("/{id}", handlers.DeleteDocument)
-		r.Delete("/{id}", handlers.DeleteDocument)
+		r.Route("/{id}", func(r chi.Router) {
+			r.Delete("/", handlers.DeleteDocument)
+			r.Get("/", handlers.GetDocumentByID)
+		})
 	})
 
 	return r

@@ -468,6 +468,10 @@ gitlab.com/tokene/doorman v0.0.0-20220926145640-23ef7cd96d5d h1:rTCDPyuYo2/mnk57
 gitlab.com/tokene/doorman v0.0.0-20220926145640-23ef7cd96d5d/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
 gitlab.com/tokene/doorman v0.0.0-20220926160223-92d3e0172c38 h1:zzn9imOr4hiaDM9BkKTuXTKRuuHEZ+0xfe4UUTYi1hI=
 gitlab.com/tokene/doorman v0.0.0-20220926160223-92d3e0172c38/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
+gitlab.com/tokene/doorman v0.0.0-20220926162915-ce08b4152af2 h1:A9WxNXgcc3THZZbS2TK3hcErnGWJHEM6x5O4x+iaZsk=
+gitlab.com/tokene/doorman v0.0.0-20220926162915-ce08b4152af2/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
+gitlab.com/tokene/doorman v0.0.0-20220926171243-49b96fed3d4b h1:TAX1FYgcffkSZS4tOaZZ8Ewo/7m4KaeWXQ2ndR6jm8M=
+gitlab.com/tokene/doorman v0.0.0-20220926171243-49b96fed3d4b/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
 gitlab.com/tokene/go-sdk v0.1.1 h1:53ZGsgSjpTwRLQra0RCBkMl7btdf0JysUrnq0oWslVo=
 gitlab.com/tokene/go-sdk v0.1.1/go.mod h1:U0RSSkbLyjJZISbSXcPP8L+wqJLml2zqJvSllv86rYk=
 go.etcd.io/etcd/api/v3 v3.5.0/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
