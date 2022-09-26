@@ -8,7 +8,7 @@ type BlobsQ interface {
 	Get() (*Blob, error)
 	Select() ([]Blob, error)
 
-	Insert(data Blob) (Blob, error)
+	Insert(data Blob) (int64, error)
 	Page(pageParams pgdb.OffsetPageParams) BlobsQ
 	DelById(id ...int64) error
 	FilterByAddress(id ...string) BlobsQ

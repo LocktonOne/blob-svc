@@ -30,8 +30,8 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	permission, err := helpers.Authorization(r, document.OwnerAddress)
-	if err != nil || !permission {
+	err = helpers.Authorization(r, document.OwnerAddress)
+	if err != nil {
 		helpers.Log(r).WithError(err).Info("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
@@ -43,11 +43,13 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.InternalError())
 		return
 	}
+
 	err = helpers.DocumentsQ(r).DelById(delReq.DocumentID)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to delete document from DB")
 		ape.Render(w, problems.InternalError())
 		return
 	}
+
 	w.WriteHeader(http.StatusNoContent)
 }

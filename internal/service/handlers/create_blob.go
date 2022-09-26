@@ -34,24 +34,26 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 	}
 	ownerAddress := req.Relationships.Owner.Data.ID
 
-	permission, err := helpers.Authorization(r, ownerAddress)
-	if err != nil || !permission {
+	err = helpers.Authorization(r, ownerAddress)
+	if err != nil {
 		helpers.Log(r).WithError(err).Info("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
-	cBlob := data.Blob{
+	blob := data.Blob{
 		OwnerAddress: ownerAddress,
 		BlobContent:  string([]byte(req.Attributes.Blob)),
 		Purpose:      req.Attributes.Purpose,
 	}
-	blob, err := helpers.BlobsQ(r).Insert(cBlob)
+
+	blob.ID, err = helpers.BlobsQ(r).Insert(blob)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to create blob in DB")
 		ape.Render(w, problems.InternalError())
 		return
 	}
+
 	result := resources.BlobResponse{
 		Data: newBlobModel(blob),
 	}

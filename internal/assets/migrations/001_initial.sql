@@ -9,7 +9,6 @@ create table documents(
     id SERIAL PRIMARY KEY,
     type TEXT,
     name TEXT,
-    image_url TEXT,
     purpose TEXT,
     owner_address BYTEA
 );

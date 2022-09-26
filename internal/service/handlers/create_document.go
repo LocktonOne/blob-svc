@@ -17,10 +17,10 @@ import (
 	"gitlab.com/tokene/blob-svc/resources"
 )
 
-func newDocumentModel(document data.Document) resources.Document {
+func newDocumentModel(document data.Document, url string) resources.Document {
 	result := resources.Document{
 		Key:           resources.NewKeyInt64(document.ID, resources.ResourceType(document.Type)),
-		Attributes:    resources.DocumentAttributes{Purpose: document.Purpose, Url: document.ImageUrl},
+		Attributes:    resources.DocumentAttributes{Purpose: document.Purpose, Url: url},
 		Relationships: resources.DocumentRelationships{Owner: resources.Relation{Data: &resources.Key{ID: document.OwnerAddress}}},
 	}
 	return result
@@ -33,9 +33,9 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	permission, err := helpers.Authorization(r, req.Relationships.Owner.Data.ID)
-	if err != nil || !permission {
-		helpers.Log(r).WithError(err).Info("user does not have permission")
+	err = helpers.Authorization(r, req.Relationships.Owner.Data.ID)
+	if err != nil {
+		helpers.Log(r).WithError(err).Debug("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
@@ -50,14 +50,23 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 
 	//File data
 	contentType := h.Header.Get("Content-Type")
-	objectName := uuid.New().String() + "." + strings.Split(contentType, "/")[1]
+	fileExtension := strings.Split(contentType, "/")[1]
+	if err := helpers.CheckFileExtension(fileExtension); err != nil {
+		helpers.Log(r).WithError(err).Debug("invalid file type")
+		ape.RenderErr(w, problems.BadRequest(err)...)
+		return
+	}
+
+	//Generate file name
+	fileName := uuid.New().String() + "." + fileExtension
 
 	// Upload the file to S3.
 	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(awsCfg.Bucket),
-		Key:    aws.String(objectName),
+		Key:    aws.String(fileName),
 		Body:   file,
 	})
+
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot upload file")
 		ape.Render(w, problems.InternalError())
@@ -68,7 +77,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	svc := s3.New(sess)
 	getObjectReq, _ := svc.GetObjectRequest(&s3.GetObjectInput{
 		Bucket: aws.String(awsCfg.Bucket),
-		Key:    aws.String(objectName),
+		Key:    aws.String(fileName),
 	})
 	url, err := getObjectReq.Presign(awsCfg.Expiration)
 	if err != nil {
@@ -78,15 +87,14 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Insert into db
-	docImage := data.Document{
+	document := data.Document{
 		Type:         string(req.Type),
-		ImageUrl:     url,
 		OwnerAddress: req.Relationships.Owner.Data.ID,
 		Purpose:      req.Attributes.Purpose,
-		Name:         objectName,
+		Name:         fileName,
 	}
 
-	doc, err := helpers.DocumentsQ(r).Insert(docImage)
+	document.ID, err = helpers.DocumentsQ(r).Insert(document)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot insert document to db")
 		ape.Render(w, problems.InternalError())
@@ -94,7 +102,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := resources.DocumentResponse{
-		Data: newDocumentModel(doc),
+		Data: newDocumentModel(document, url),
 	}
 	ape.Render(w, resp)
 }

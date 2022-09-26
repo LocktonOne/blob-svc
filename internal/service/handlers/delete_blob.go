@@ -30,8 +30,8 @@ func DeleteBlob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	permission, err := helpers.Authorization(r, blob.OwnerAddress)
-	if err != nil || !permission {
+	err = helpers.Authorization(r, blob.OwnerAddress)
+	if err != nil {
 		helpers.Log(r).WithError(err).Info("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
 		return

@@ -17,8 +17,7 @@ require (
 	gitlab.com/distributed_lab/figure v2.1.0+incompatible
 	gitlab.com/distributed_lab/kit v1.11.1
 	gitlab.com/distributed_lab/logan v3.8.1+incompatible
-	gitlab.com/distributed_lab/urlval v3.0.0+incompatible
-	gitlab.com/tokene/doorman v0.0.0-20220920131532-c7ea1295179f
+	gitlab.com/tokene/doorman v0.0.0-20220926160223-92d3e0172c38
 )
 
 require (

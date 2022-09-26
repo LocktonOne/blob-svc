@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi"
 	"github.com/spf13/cast"
 )
 
@@ -16,7 +15,7 @@ type GetBlobIDRequest struct {
 func NewGetBlobIDRequest(r *http.Request) (GetBlobIDRequest, error) {
 	request := GetBlobIDRequest{}
 
-	id := chi.URLParam(r, "id")
+	id := r.URL.Query().Get("id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return request, errors.New("id is not an integer")
 	}

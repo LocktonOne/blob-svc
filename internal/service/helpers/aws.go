@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -8,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
+
+var AlowedFileExtensions = []string{".png", ".jpg", ".jpeg", ".bmp"}
 
 func NewAwsSession(r *http.Request) *session.Session {
 	awsCfg := AwsConfig(r)
@@ -38,4 +41,12 @@ func DeleteItem(sess *session.Session, bucket *string, item *string) error {
 	}
 
 	return nil
+}
+func CheckFileExtension(ext string) error {
+	for _, el := range AlowedFileExtensions {
+		if el == ext {
+			return nil
+		}
+	}
+	return errors.New("invalid file extension")
 }
