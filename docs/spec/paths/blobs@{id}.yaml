@@ -10,8 +10,13 @@ get:
     - Blobs
   summary: Get blob
   operationId: getBlob
-  security:
-    - bearerAuth: []
+  parameters:
+    - in: header
+      name: Authorization
+      schema:
+        type: string
+        format: Bearer {token}
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   responses:
     '200':
       description: Success
@@ -36,6 +41,13 @@ get:
                   type: array
                   items:
                     $ref: "#/components/schemas/GetBlobError"
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/UnauthorizedError"
     '404':
         description: Not Found
         content:
@@ -57,8 +69,13 @@ delete:
     - Blobs
   summary: Delete Blob
   operationId: deleteBlob
-  security:
-    - bearerAuth: []
+  parameters:
+    - in: header
+      name: Authorization
+      schema:
+        type: string
+        format: Bearer {token}
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   responses:
     '202':
       description: Success
@@ -75,5 +92,12 @@ delete:
                 type: array
                 items:
                   $ref: "#/components/schemas/GetBlobError"
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/UnauthorizedError"
     '500':
       $ref: "#/components/responses/InternalError"

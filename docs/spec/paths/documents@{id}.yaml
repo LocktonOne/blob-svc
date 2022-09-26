@@ -10,8 +10,13 @@ delete:
     - Documents
   summary: Delete Document
   operationId: deleteDocument
-  security:
-    - bearerAuth: []
+  parameters:
+    - in: header
+      name: Authorization
+      schema:
+        type: string
+        format: Bearer {token}
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   responses:
     '202':
       description: Success
@@ -28,5 +33,12 @@ delete:
                 type: array
                 items:
                   $ref: "#/components/schemas/GetDocumentError"
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/UnauthorizedError"
     '500':
       $ref: "#/components/responses/InternalError"
