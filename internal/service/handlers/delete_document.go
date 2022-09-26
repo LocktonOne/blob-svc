@@ -12,14 +12,14 @@ import (
 
 func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 
-	delReq, err := requests.NewGetDocumentID(r)
+	documentID, err := requests.NewGetDocumentID(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
-	document, err := helpers.DocumentsQ(r).FilterByID(delReq.DocumentID).Get()
+	document, err := helpers.DocumentsQ(r).FilterByID(documentID).Get()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get document from DB")
 		ape.Render(w, problems.InternalError())
@@ -37,14 +37,14 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helpers.DeleteItem(helpers.NewAwsSession(r), &helpers.AwsConfig(r).Bucket, &document.Name)
+	helpers.DeleteItem(helpers.NewAwsSession(r), &document.Name, *helpers.AwsConfig(r))
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("failed to delete document from s3 bucket")
 		ape.Render(w, problems.InternalError())
 		return
 	}
 
-	err = helpers.DocumentsQ(r).DelById(delReq.DocumentID)
+	err = helpers.DocumentsQ(r).DelById(documentID)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to delete document from DB")
 		ape.Render(w, problems.InternalError())

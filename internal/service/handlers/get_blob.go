@@ -13,28 +13,21 @@ import (
 
 func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 
-	req, err := requests.NewGetBlobIDRequest(r)
+	blobID, err := requests.NewGetBlobIDRequest(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-	doorman := helpers.DoormanConnector(r)
 
-	token, err := doorman.GetAuthToken(r)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-	_, err = doorman.ValidateJwt(token)
+	_, err = helpers.ValidateJwt(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
-	blob, err := helpers.BlobsQ(r).FilterByID(req.BlobID).Get()
+	blob, err := helpers.BlobsQ(r).FilterByID(blobID).Get()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get blob from DB")
 		ape.Render(w, problems.InternalError())

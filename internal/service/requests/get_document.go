@@ -12,15 +12,12 @@ type GetDocumentRequest struct {
 	DocumentID int64 `url:"-"`
 }
 
-func NewGetDocumentID(r *http.Request) (GetDocumentRequest, error) {
-	request := GetDocumentRequest{}
+func NewGetDocumentID(r *http.Request) (int64, error) {
 
 	id := r.URL.Query().Get("id")
 	if _, err := strconv.Atoi(id); err != nil {
-		return request, errors.New("id is not an integer")
+		return 0, errors.New("id is not an integer")
 	}
 
-	request.DocumentID = cast.ToInt64(id)
-
-	return request, nil
+	return cast.ToInt64(id), nil
 }

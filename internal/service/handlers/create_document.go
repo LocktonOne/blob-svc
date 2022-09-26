@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/google/uuid"
 	"gitlab.com/distributed_lab/ape"
@@ -46,9 +45,10 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	//Create session
 	sess := helpers.NewAwsSession(r)
 
+	//Create updloader
 	uploader := s3manager.NewUploader(sess)
 
-	//File data
+	//Check document extenstion
 	contentType := h.Header.Get("Content-Type")
 	fileExtension := strings.Split(contentType, "/")[1]
 	if err := helpers.CheckFileExtension(fileExtension); err != nil {
@@ -57,7 +57,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//Generate file name
+	//Generate key
 	fileName := uuid.New().String() + "." + fileExtension
 
 	// Upload the file to S3.
@@ -66,7 +66,6 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		Key:    aws.String(fileName),
 		Body:   file,
 	})
-
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot upload file")
 		ape.Render(w, problems.InternalError())
@@ -74,12 +73,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Get url
-	svc := s3.New(sess)
-	getObjectReq, _ := svc.GetObjectRequest(&s3.GetObjectInput{
-		Bucket: aws.String(awsCfg.Bucket),
-		Key:    aws.String(fileName),
-	})
-	url, err := getObjectReq.Presign(awsCfg.Expiration)
+	url, err := helpers.GetItemURL(sess, fileName, *awsCfg)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot get object's url")
 		ape.Render(w, problems.InternalError())
