@@ -47,12 +47,12 @@ func (q *DocumentsQ) Select() ([]data.Document, error) {
 
 func (q *DocumentsQ) Insert(value data.Document) (int64, error) {
 	clauses := structs.Map(value)
+	var id int64
 
-	var result data.Document
-	stmt := sq.Insert(documentsTableName).SetMap(clauses).Suffix("returning *")
-	err := q.db.Get(&result, stmt)
+	stmt := sq.Insert(documentsTableName).SetMap(clauses).Suffix("returning id")
+	err := q.db.Get(&id, stmt)
 
-	return result.ID, err
+	return id, err
 }
 func (q *DocumentsQ) Page(pageParams pgdb.OffsetPageParams) data.DocumentsQ {
 	q.sql = pageParams.ApplyTo(q.sql, "id")

@@ -47,12 +47,12 @@ func (q *BlobsQ) Select() ([]data.Blob, error) {
 
 func (q *BlobsQ) Insert(value data.Blob) (int64, error) {
 	clauses := structs.Map(value)
+	var id int64
 
-	var result data.Blob
-	stmt := sq.Insert(blobsTableName).SetMap(clauses).Suffix("returning *")
-	err := q.db.Get(&result, stmt)
+	stmt := sq.Insert(blobsTableName).SetMap(clauses).Suffix("returning id")
+	err := q.db.Get(&id, stmt)
 
-	return result.ID, err
+	return id, err
 }
 func (q *BlobsQ) Page(pageParams pgdb.OffsetPageParams) data.BlobsQ {
 	q.sql = pageParams.ApplyTo(q.sql, "id")

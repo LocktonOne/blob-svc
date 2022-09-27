@@ -1,17 +1,17 @@
 -- +migrate Up
-create table blobs (
+CREATE TABLE blobs (
     id SERIAL PRIMARY KEY,
-    owner_address Bytea,
+    owner_address BYTEA,
     purpose TEXT,
-    blob_content json not null
+    blob_content JSON NOT NULL
 );
-create table documents(
-    id SERIAL PRIMARY KEY,
+CREATE TABLE documents(
+    id BIGSERIAL PRIMARY KEY,
     type TEXT,
     name TEXT,
     purpose TEXT,
     owner_address BYTEA
 );
 -- +migrate Down
-drop table blobs;
-drop table documents;
+DROP TABLE blobs;
+DROP TABLE documents;
