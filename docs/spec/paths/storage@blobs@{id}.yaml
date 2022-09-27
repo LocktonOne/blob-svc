@@ -99,5 +99,18 @@ delete:
           schema:
             type: object
             $ref: "#/components/schemas/UnauthorizedError"
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/responses/NotFound"
     '500':
       $ref: "#/components/responses/InternalError"
