@@ -32,6 +32,7 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
+
 	ownerAddress := req.Relationships.Owner.Data.ID
 
 	err = helpers.Authorization(r, ownerAddress)

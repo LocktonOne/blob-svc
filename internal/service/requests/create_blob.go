@@ -3,6 +3,7 @@ package requests
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"gitlab.com/tokene/blob-svc/internal/types"
 	"gitlab.com/tokene/blob-svc/resources"
@@ -18,6 +19,7 @@ func NewCreateBlobRequest(r *http.Request) (resources.Blob, error) {
 
 		return request.Data, errors.Wrap(err, "failed to unmarshal")
 	}
+	request.Data.Relationships.Owner.Data.ID = strings.ToLower(request.Data.Relationships.Owner.Data.ID)
 
 	return request.Data, validate(request.Data)
 }

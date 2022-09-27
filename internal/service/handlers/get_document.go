@@ -20,19 +20,20 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = helpers.ValidateJwt(r)
-	if err != nil {
-		helpers.Log(r).WithError(err).Info("invalid auth token")
-		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-
 	document, err := helpers.DocumentsQ(r).FilterByID(documentID).Get()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get document from DB")
 		ape.Render(w, problems.InternalError())
 		return
 	}
+
+	err = helpers.Authorization(r, document.OwnerAddress)
+	if err != nil {
+		helpers.Log(r).WithError(err).Info("invalid auth token")
+		ape.RenderErr(w, problems.Unauthorized())
+		return
+	}
+
 	if document == nil {
 		ape.Render(w, problems.NotFound())
 		return
@@ -43,5 +44,6 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 	result := resources.DocumentResponse{
 		Data: newDocumentModel(*document, url),
 	}
+
 	ape.Render(w, result)
 }

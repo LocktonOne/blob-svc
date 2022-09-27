@@ -3,6 +3,7 @@ package requests
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"gitlab.com/tokene/blob-svc/internal/types"
 
@@ -18,9 +19,13 @@ func NewСreateDocumentRequest(r *http.Request) (resources.Document, error) {
 	if err != nil {
 		return request.Data, errors.Wrap(err, "multipart limit to unmarshal")
 	}
+
 	if err := json.Unmarshal([]byte(r.FormValue("Document")), &request); err != nil {
 		return request.Data, errors.Wrap(err, "multipart limit to unmarshal")
 	}
+
+	request.Data.Relationships.Owner.Data.ID = strings.ToLower(request.Data.Relationships.Owner.Data.ID)
+
 	return request.Data, ValidatePutDocumentRequest(request.Data)
 }
 
