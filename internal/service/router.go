@@ -24,22 +24,23 @@ func (s *service) router(cfg config.Config) chi.Router {
 			helpers.CtxDoormanConnector(cfg.DoormanConnector()),
 		),
 	)
-	r.Route("/blobs", func(r chi.Router) {
-		r.Post("/", handlers.CreateBlob)
-		r.Get("/", handlers.GetBlobsByOwnerAddress)
-		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", handlers.GetBlobByID)
-			r.Delete("/", handlers.DeleteBlob)
+	r.Route("/storage", func(r chi.Router) {
+		r.Route("/blobs", func(r chi.Router) {
+			r.Post("/", handlers.CreateBlob)
+			r.Get("/", handlers.GetBlobsByOwnerAddress)
+			r.Route("/{id}", func(r chi.Router) {
+				r.Get("/", handlers.GetBlobByID)
+				r.Delete("/", handlers.DeleteBlob)
+			})
+		})
+		r.Route("/documents", func(r chi.Router) {
+			r.Post("/", handlers.CreateDocument)
+			r.Get("/", handlers.GetDocumentsByOwnerAddress)
+			r.Route("/{id}", func(r chi.Router) {
+				r.Delete("/", handlers.DeleteDocument)
+				r.Get("/", handlers.GetDocumentByID)
+			})
 		})
 	})
-	r.Route("/documents", func(r chi.Router) {
-		r.Post("/", handlers.CreateDocument)
-		r.Get("/", handlers.GetDocumentsByOwnerAddress)
-		r.Route("/{id}", func(r chi.Router) {
-			r.Delete("/", handlers.DeleteDocument)
-			r.Get("/", handlers.GetDocumentByID)
-		})
-	})
-
 	return r
 }

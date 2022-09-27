@@ -54,3 +54,33 @@ post:
             $ref: "#/components/schemas/UnauthorizedError"
     '500':
       $ref: "#/components/responses/InternalError"
+get:
+  tags:
+    - Blobs
+  summary: Get owner's blobs list
+  operationId: getBlobsList
+  parameters:
+    - in: query
+      name: 'owner'
+      required: false
+      schema:
+        type: string
+    - in: header
+      name: Authorization
+      schema:
+        type: string
+        format: Bearer {token}
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blob'
+
