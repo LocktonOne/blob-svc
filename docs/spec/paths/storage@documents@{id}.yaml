@@ -7,9 +7,9 @@ parameters:
         type: integer
 get:
   tags:
-    - Blobs
-  summary: Get blob
-  operationId: getBlob
+    - Documents
+  summary: Get Document
+  operationId: getDocument
   parameters:
     - in: header
       name: Authorization
