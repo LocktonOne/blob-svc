@@ -13,7 +13,7 @@ import (
 
 func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 
-	blobID, err := requests.NewGetBlobIDRequest(r)
+	req, err := requests.NewGetBlobIDRequest(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
@@ -27,7 +27,7 @@ func GetBlobByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	blob, err := helpers.BlobsQ(r).FilterByID(blobID).Get()
+	blob, err := helpers.BlobsQ(r).FilterByID(req.ID).Get()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get blob from DB")
 		ape.Render(w, problems.InternalError())

@@ -12,14 +12,14 @@ import (
 
 func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 
-	documentID, err := requests.NewGetDocumentID(r)
+	req, err := requests.NewGetDocumentID(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
-	document, err := helpers.DocumentsQ(r).FilterByID(documentID).Get()
+	document, err := helpers.DocumentsQ(r).FilterByID(req.ID).Get()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get document from DB")
 		ape.Render(w, problems.InternalError())
@@ -44,7 +44,7 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = helpers.DocumentsQ(r).DelById(documentID)
+	err = helpers.DocumentsQ(r).DelById(req.ID)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to delete document from DB")
 		ape.Render(w, problems.InternalError())

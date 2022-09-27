@@ -9,12 +9,18 @@ import (
 	"github.com/spf13/cast"
 )
 
-func NewGetBlobIDRequest(r *http.Request) (int64, error) {
+type GetBlobByIDRequest struct {
+	ID int64
+}
+
+func NewGetBlobIDRequest(r *http.Request) (GetBlobByIDRequest, error) {
+	request := GetBlobByIDRequest{}
 
 	id := chi.URLParam(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
-		return 0, errors.New("id is not an integer")
+		return request, errors.New("id is not an integer")
 	}
 
-	return cast.ToInt64(id), nil
+	request.ID = cast.ToInt64(id)
+	return request, nil
 }
