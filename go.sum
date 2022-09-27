@@ -464,14 +464,6 @@ gitlab.com/distributed_lab/lorem v0.2.0 h1:Rc7Ef3eGSpei8EtWcV6fzPW3O/QEF2zgZR4+h
 gitlab.com/distributed_lab/lorem v0.2.0/go.mod h1:wkzrGoB1L/yUBu56SfoJ/vNiPqiHZcg75AnBkWNcjhQ=
 gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c h1:cpIjV8C//7sLVvMcBaFGopI8sMcCw8Za7T0HIf52esU=
 gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c/go.mod h1:4TnADX84dQjQMRHKIMPCVL0L97rD/Jxv0xDbrN6aKzk=
-gitlab.com/distributed_lab/urlval v3.0.0+incompatible h1:OWU3CcZU+z0BVooufOSQFO9biDfsjM3e7YYauC278HU=
-gitlab.com/distributed_lab/urlval v3.0.0+incompatible/go.mod h1:cKnUlnZCHUuke/l95YLvW5JoGC2yn53HVgF9rt1WiIg=
-gitlab.com/tokene/doorman v0.0.0-20220926145640-23ef7cd96d5d h1:rTCDPyuYo2/mnk57ckJMMf4A2jCUb/SNjsfayalWjNE=
-gitlab.com/tokene/doorman v0.0.0-20220926145640-23ef7cd96d5d/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
-gitlab.com/tokene/doorman v0.0.0-20220926160223-92d3e0172c38 h1:zzn9imOr4hiaDM9BkKTuXTKRuuHEZ+0xfe4UUTYi1hI=
-gitlab.com/tokene/doorman v0.0.0-20220926160223-92d3e0172c38/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
-gitlab.com/tokene/doorman v0.0.0-20220926162915-ce08b4152af2 h1:A9WxNXgcc3THZZbS2TK3hcErnGWJHEM6x5O4x+iaZsk=
-gitlab.com/tokene/doorman v0.0.0-20220926162915-ce08b4152af2/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
 gitlab.com/tokene/doorman v0.0.0-20220926171243-49b96fed3d4b h1:TAX1FYgcffkSZS4tOaZZ8Ewo/7m4KaeWXQ2ndR6jm8M=
 gitlab.com/tokene/doorman v0.0.0-20220926171243-49b96fed3d4b/go.mod h1:QXfdfOW4D9xXdZNDEh45+epjUJl3AluC3aaEQMuKbTU=
 gitlab.com/tokene/go-sdk v0.1.1 h1:53ZGsgSjpTwRLQra0RCBkMl7btdf0JysUrnq0oWslVo=

@@ -50,7 +50,6 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	gitlab.com/distributed_lab/lorem v0.2.0 // indirect
 	gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c // indirect
-	gitlab.com/distributed_lab/urlval v3.0.0+incompatible // indirect
 	gitlab.com/tokene/go-sdk v0.1.1 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
