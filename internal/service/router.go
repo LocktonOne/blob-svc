@@ -26,6 +26,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 	)
 	r.Route("/blobs", func(r chi.Router) {
 		r.Post("/", handlers.CreateBlob)
+		r.Get("/", handlers.GetBlobsByOwnerAddress)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Get("/", handlers.GetBlobByID)
 			r.Delete("/", handlers.DeleteBlob)
@@ -33,6 +34,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 	})
 	r.Route("/documents", func(r chi.Router) {
 		r.Post("/", handlers.CreateDocument)
+		r.Get("/", handlers.GetDocumentsByOwnerAddress)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Delete("/", handlers.DeleteDocument)
 			r.Get("/", handlers.GetDocumentByID)
