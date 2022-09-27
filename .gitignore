@@ -2,3 +2,4 @@
 .idea/
 config.*.yaml
 docs/node_modules
+docs/web_deploy
