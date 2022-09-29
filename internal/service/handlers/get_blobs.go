@@ -35,7 +35,7 @@ func GetBlobsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	blobs, err := helpers.BlobsQ(r).FilterByAddress(req.OwnerFilter).Select()
+	blobs, err := helpers.BlobsQ(r).FilterByAddress(req.Owner).Select()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get blobs from DB")
 		ape.Render(w, problems.InternalError())

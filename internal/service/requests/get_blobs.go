@@ -9,16 +9,20 @@ import (
 )
 
 type GetBLobsListRequest struct {
-	OwnerFilter string `filter:"owner"`
+	Owner string
 }
 
 func NewGetBLobsListRequest(r *http.Request) (GetBLobsListRequest, error) {
 	request := GetBLobsListRequest{}
 
-	request.OwnerFilter = strings.ToLower(r.URL.Query().Get("owner"))
-	if err := validation.Validate(request.OwnerFilter, validation.Required, validation.Match(types.AddressRegexp)); err != nil {
+	request.Owner = strings.ToLower(r.URL.Query().Get("owner"))
+	if err := validation.Validate(request.Owner, validation.Required, validation.Match(types.AddressRegexp)); err != nil {
 		return request, err
 	}
 
 	return request, nil
+}
+
+func (r GetBLobsListRequest) validate() error {
+	return validation.Validate(r.Owner, validation.Required, validation.Match(types.AddressRegexp))
 }

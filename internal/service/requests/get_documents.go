@@ -9,16 +9,17 @@ import (
 )
 
 type GetDocumentsListRequest struct {
-	OwnerFilter string `filter:"owner"`
+	Owner string
 }
 
 func NewGetDocumentsListRequest(r *http.Request) (GetDocumentsListRequest, error) {
 	request := GetDocumentsListRequest{}
 
-	request.OwnerFilter = strings.ToLower(r.URL.Query().Get("owner"))
-	if err := validation.Validate(request.OwnerFilter, validation.Required, validation.Match(types.AddressRegexp)); err != nil {
-		return request, err
-	}
+	request.Owner = strings.ToLower(r.URL.Query().Get("owner"))
 
-	return request, nil
+	return request, request.validate()
+}
+
+func (r GetDocumentsListRequest) validate() error {
+	return validation.Validate(r.Owner, validation.Required, validation.Match(types.AddressRegexp))
 }

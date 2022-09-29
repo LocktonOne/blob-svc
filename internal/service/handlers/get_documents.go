@@ -28,14 +28,14 @@ func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = helpers.Authorization(r, req.OwnerFilter)
+	err = helpers.Authorization(r, req.Owner)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
-	documents, err := helpers.DocumentsQ(r).FilterByAddress(req.OwnerFilter).Select()
+	documents, err := helpers.DocumentsQ(r).FilterByAddress(req.Owner).Select()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get blobs from DB")
 		ape.Render(w, problems.InternalError())
