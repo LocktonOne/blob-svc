@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi"
 	"github.com/spf13/cast"
 )
 
@@ -16,7 +17,7 @@ func NewGetDocumentID(r *http.Request) (GetDocumentByIDRequest, error) {
 
 	request := GetDocumentByIDRequest{}
 
-	id := r.URL.Query().Get("id")
+	id := chi.URLParam(r, "id")
 	if _, err := strconv.Atoi(id); err != nil {
 		return request, errors.New("id is not an integer")
 	}
