@@ -1,6 +1,6 @@
 -- +migrate Up
 CREATE TABLE blobs (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     owner_address BYTEA,
     purpose TEXT,
     blob_content JSON NOT NULL

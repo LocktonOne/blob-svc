@@ -24,7 +24,7 @@ func (s *service) router(cfg config.Config) chi.Router {
 			helpers.CtxDoormanConnector(cfg.DoormanConnector()),
 		),
 	)
-	r.Route("/storage", func(r chi.Router) {
+	r.Route("/integrations/storage", func(r chi.Router) {
 		r.Route("/blobs", func(r chi.Router) {
 			r.Post("/", handlers.CreateBlob)
 			r.Get("/", handlers.GetBlobsByOwnerAddress)
