@@ -13,8 +13,12 @@ import (
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
 
+type CreateDocumentRequest struct {
+	Data resources.Document `json:"data"`
+}
+
 func NewСreateDocumentRequest(r *http.Request) (resources.Document, error) {
-	var request resources.DocumentResponse
+	var request CreateDocumentRequest
 	err := r.ParseMultipartForm(1 << 32)
 	if err != nil {
 		return request.Data, errors.Wrap(err, "multipart limit to unmarshal")
@@ -26,13 +30,13 @@ func NewСreateDocumentRequest(r *http.Request) (resources.Document, error) {
 
 	request.Data.Relationships.Owner.Data.ID = strings.ToLower(request.Data.Relationships.Owner.Data.ID)
 
-	return request.Data, ValidatePutDocumentRequest(request.Data)
+	return request.Data, request.validate()
 }
 
-func ValidatePutDocumentRequest(r resources.Document) error {
+func (r CreateDocumentRequest) validate() error {
 	return validation.Errors{
-		"/data/type":                        validation.Validate(&r.Type, validation.Required),
-		"/data/relationships/owner/data/id": validation.Validate(&r.Relationships.Owner.Data.ID, validation.Required, validation.Match(types.AddressRegexp)),
-		"/data/attributes/purpose":          validation.Validate(&r.Attributes.Purpose, validation.Required, types.IsPurpose),
+		"/data/type":                        validation.Validate(&r.Data.Type, validation.Required),
+		"/data/relationships/owner/data/id": validation.Validate(&r.Data.Relationships.Owner.Data.ID, validation.Required, validation.Match(types.AddressRegexp)),
+		"/data/attributes/purpose":          validation.Validate(&r.Data.Attributes.Purpose, validation.Required, types.IsPurpose),
 	}.Filter()
 }
