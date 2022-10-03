@@ -2,16 +2,16 @@ FROM golang:1.18-alpine as buildbase
 
 RUN apk add git build-base
 
-WORKDIR /go/src/blob_api
+WORKDIR /go/src/blob-svc
 COPY vendor .
 COPY . .
 
-RUN GOOS=linux go build  -o /usr/local/bin/blob_api /go/src/blob_api
+RUN GOOS=linux go build  -o /usr/local/bin/blob-svc /go/src/blob-svc
 
 
 FROM alpine:3.9
 
-COPY --from=buildbase /usr/local/bin/blob_api /usr/local/bin/blob_api
+COPY --from=buildbase /usr/local/bin/blob-svc /usr/local/bin/blob-svc
 RUN apk add --no-cache ca-certificates
 
-ENTRYPOINT ["blob_api"]
+ENTRYPOINT ["blob-svc"]
