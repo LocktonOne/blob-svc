@@ -11,7 +11,7 @@ cop:
   disabled: true
   endpoint: "http://..."
   upstream: "http://..."
-  service_name: blob_api
+  service_name: blob-svc
   service_port: 80
 
 aws:
