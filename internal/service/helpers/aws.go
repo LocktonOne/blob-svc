@@ -16,9 +16,11 @@ var AlowedFileExtensions = []string{"png", "jpg", "jpeg", "bmp"}
 func NewAwsSession(r *http.Request) *session.Session {
 	awsCfg := AwsConfig(r)
 	sess := session.Must(session.NewSession(&aws.Config{
-		Region:      aws.String(awsCfg.Region),
-		Credentials: credentials.NewStaticCredentials(awsCfg.AccessKeyID, awsCfg.SecretKeyID, ""),
-		DisableSSL:  &awsCfg.SslDisable,
+		Endpoint:         &awsCfg.Endpoint,
+		S3ForcePathStyle: &awsCfg.ForcePathStyle,
+		Region:           aws.String(awsCfg.Region),
+		Credentials:      credentials.NewStaticCredentials(awsCfg.AccessKeyID, awsCfg.SecretKeyID, ""),
+		DisableSSL:       &awsCfg.SslDisable,
 	}))
 	return sess
 }
