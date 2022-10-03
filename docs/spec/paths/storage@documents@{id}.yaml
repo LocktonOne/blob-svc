@@ -1,0 +1,116 @@
+parameters:
+    - name: id
+      in: path
+      description: Document identifier
+      required: true
+      schema:
+        type: integer
+get:
+  tags:
+    - Documents
+  summary: Get Document
+  operationId: getDocument
+  parameters:
+    - in: header
+      name: Authorization
+      schema:
+        type: string
+        format: Bearer {token}
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                $ref: '#/components/schemas/Document'
+    '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - errors
+              properties:
+                errors:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/GetDocumentError"
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/UnauthorizedError"
+    '404':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - errors
+              properties:
+                errors:
+                  type: array
+                  items:
+                    $ref: "#/components/responses/NotFound"
+    '500':
+      $ref: "#/components/responses/InternalError"
+
+delete:
+  tags:
+    - Documents
+  summary: Delete Document
+  operationId: deleteDocument
+  parameters:
+    - in: header
+      name: Authorization
+      schema:
+        type: string
+        format: Bearer {token}
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  responses:
+    '202':
+      description: Success
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetDocumentError"
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/UnauthorizedError"
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - errors
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/responses/NotFound"
+    '500':
+      $ref: "#/components/responses/InternalError"

@@ -1,0 +1,8 @@
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: owner address
+    example:  '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'

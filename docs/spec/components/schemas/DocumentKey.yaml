@@ -1,0 +1,12 @@
+type: object
+required:
+  - type
+properties:
+  type:
+    description: document type
+    type: string
+    enum:
+      - passport
+  id:
+    type: string
+    example: "123"

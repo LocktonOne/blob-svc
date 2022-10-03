@@ -1,0 +1,31 @@
+allOf:
+  - $ref: '#/components/schemas/BlobKey'
+  - type: object
+    required: [relationships, attributes]
+    properties:
+      relationships:
+        type: object
+        required:
+          - owner
+        properties:
+          owner:
+            type: object
+            required:
+              - data
+            description: Blob owner
+            properties:
+              data:
+                type: object
+                $ref: '#/components/schemas/OwnerKey'
+      attributes:
+        type: object
+        required:
+          - blob
+          - purpose
+        properties:
+          blob:
+            type: object
+            format: json.RawMessage
+          purpose:
+            type: string
+            example: "KYC"
