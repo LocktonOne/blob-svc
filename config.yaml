@@ -15,6 +15,8 @@ cop:
   service_port: 80
 
 aws:
+  endpoint: service-endpoint
+  force_path_style: true
   access_key: aws-user-access-key
   secret_key: aws-user-secret-key
   bucket: bucket-name
