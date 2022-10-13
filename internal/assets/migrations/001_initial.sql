@@ -9,8 +9,7 @@ CREATE TABLE documents(
     id BIGSERIAL PRIMARY KEY,
     type TEXT,
     name TEXT,
-    purpose TEXT,
-    owner_address BYTEA
+    content_type BYTEA
 );
 -- +migrate Down
 DROP TABLE blobs;

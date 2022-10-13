@@ -16,10 +16,10 @@ import (
 	"gitlab.com/tokene/blob-svc/resources"
 )
 
-func newDocumentModel(document data.Document, contentType string) resources.Document {
+func newDocumentModel(document data.Document) resources.Document {
 	result := resources.Document{
 		Key:           resources.NewKeyInt64(document.ID, resources.ResourceType(document.Type)),
-		Attributes:    resources.DocumentAttributes{Purpose: document.Purpose, ContentType: contentType},
+		Attributes:    resources.DocumentAttributes{ContentType: document.ContentType},
 		Relationships: resources.DocumentRelationships{Owner: resources.Relation{Data: &resources.Key{ID: document.OwnerAddress}}},
 	}
 	return result
@@ -84,7 +84,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	document := data.Document{
 		Type:         string(req.Type),
 		OwnerAddress: req.Relationships.Owner.Data.ID,
-		Purpose:      req.Attributes.Purpose,
+		ContentType:  req.Attributes.ContentType,
 		Name:         fileName,
 	}
 
@@ -96,7 +96,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := resources.DocumentResponse{
-		Data: newDocumentModel(document, req.Attributes.ContentType),
+		Data: newDocumentModel(document),
 	}
 	ape.Render(w, resp)
 }

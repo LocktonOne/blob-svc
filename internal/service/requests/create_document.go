@@ -37,6 +37,5 @@ func (r CreateDocumentRequest) validate() error {
 	return validation.Errors{
 		"/data/type":                        validation.Validate(&r.Data.Type, validation.Required),
 		"/data/relationships/owner/data/id": validation.Validate(&r.Data.Relationships.Owner.Data.ID, validation.Required, validation.Match(types.AddressRegexp)),
-		"/data/attributes/purpose":          validation.Validate(&r.Data.Attributes.Purpose, validation.Required, types.IsPurpose),
 	}.Filter()
 }

@@ -8,13 +8,8 @@ allOf:
       attributes:
         type: object
         required:
-          - purpose
           - content-type
         properties:
-          purpose:
-            type: string
-            enum:
-              - "kyc"
           content-type:
             type: string
             example: "application/pdf"

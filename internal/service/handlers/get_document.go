@@ -39,10 +39,8 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url, err := helpers.GetItemURL(helpers.NewAwsSession(r), document.Name, *helpers.AwsConfig(r))
-
 	result := resources.DocumentResponse{
-		Data: newDocumentModel(*document, url),
+		Data: newDocumentModel(*document),
 	}
 
 	ape.Render(w, result)
