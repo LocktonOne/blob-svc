@@ -9,14 +9,15 @@ allOf:
         type: object
         required:
           - purpose
-          - url
+          - content-type
         properties:
-          url:
-            type: string
           purpose:
             type: string
             enum:
               - "kyc"
+          content-type:
+            type: string
+            example: "application/pdf"
       relationships:
         type: object
         required:
