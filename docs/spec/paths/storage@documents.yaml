@@ -1,33 +1,32 @@
 post:
   tags:
     - Documents
-  summary: Upload Document
-  description: "Upload Document"
-  operationId: getUploadDocument
-  parameters:
-    - in: header
-      name: Authorization
-      schema:
-        type: string
-        format: Bearer {token}
-        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  summary: Upload Policy
+  description: "Get upload policy.\n\n\U0001F512 An admin's signature is needed\n"
+  operationId: getUploadPolicy
   requestBody:
     content:
-      multipart/form-data:
+      application/json:
         schema:
           type: object
-          properties: # Request parts
-            Document:
+          required:
+            - data
+          properties:
+            data:
               type: object
-              $ref: '#/components/schemas/Document'
-            Image:
-              type: string
-              format: base64
-        encoding: # The same level as schema
-          profileImage: # Property name (see above)
-            contentType: image/png, image/jpeg
-    description: Upload Document
+              required: true
+              $ref: '#/components/schemas/DocumentRequest'
+      application/xml:
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              required: true
+              $ref: '#/components/schemas/DocumentRequest'
+    description: Get Upload Policy
     required: true
+
   responses:
     '200':
       description: Success

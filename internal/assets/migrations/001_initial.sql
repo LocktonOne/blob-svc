@@ -9,7 +9,7 @@ CREATE TABLE documents(
     id BIGSERIAL PRIMARY KEY,
     type TEXT,
     name TEXT,
-    purpose TEXT,
+    content_type TEXT,
     owner_address BYTEA
 );
 -- +migrate Down
