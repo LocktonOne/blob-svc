@@ -8,11 +8,8 @@ allOf:
       attributes:
         type: object
         required:
-          - url
           - content_type
         properties:
-          url:
-            type: string
           content_type:
             type: string
       relationships:
@@ -28,4 +25,5 @@ allOf:
             properties:
               data:
                 $ref: '#/components/schemas/OwnerKey'
+
 

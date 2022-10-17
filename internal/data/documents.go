@@ -22,5 +22,5 @@ type Document struct {
 	Type         string `db:"type" structs:"type"`
 	OwnerAddress string `db:"owner_address" structs:"owner_address"`
 	Name         string `db:"name" structs:"name"`
-	Purpose      string `db:"purpose" structs:"purpose"`
+	ContentType  string `db:"content_type" structs:"content_type"`
 }

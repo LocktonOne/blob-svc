@@ -19,7 +19,7 @@ import (
 func newDocumentModel(document data.Document, url string) resources.Document {
 	result := resources.Document{
 		Key:           resources.NewKeyInt64(document.ID, resources.ResourceType(document.Type)),
-		Attributes:    resources.DocumentAttributes{Purpose: document.Purpose, Url: url},
+		Attributes:    resources.DocumentAttributes{ContentType: document.ContentType, Url: url},
 		Relationships: resources.DocumentRelationships{Owner: resources.Relation{Data: &resources.Key{ID: document.OwnerAddress}}},
 	}
 	return result
@@ -84,7 +84,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	document := data.Document{
 		Type:         string(req.Type),
 		OwnerAddress: req.Relationships.Owner.Data.ID,
-		Purpose:      req.Attributes.Purpose,
+		ContentType:  req.Attributes.ContentType,
 		Name:         fileName,
 	}
 
