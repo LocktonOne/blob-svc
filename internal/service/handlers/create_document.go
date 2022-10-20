@@ -28,6 +28,7 @@ func newDocumentModel(document data.Document) resources.Document {
 func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewСreateDocumentRequest(r)
 	if err != nil {
+		helpers.Log(r).WithError(err).Error("failed to parse request")
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
