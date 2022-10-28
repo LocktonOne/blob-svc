@@ -27,15 +27,15 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if document == nil {
+		ape.Render(w, problems.NotFound())
+		return
+	}
+
 	err = helpers.Authorization(r, document.OwnerAddress)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
-		return
-	}
-
-	if document == nil {
-		ape.Render(w, problems.NotFound())
 		return
 	}
 

@@ -25,4 +25,4 @@ aws:
   ssldisable: true
 
 doorman:
-  service_url: "dorman-url"
+  service_url: "doorman-url"

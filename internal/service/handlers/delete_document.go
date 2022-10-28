@@ -37,7 +37,7 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helpers.DeleteItem(helpers.NewAwsSession(r), &document.Name, *helpers.AwsConfig(r))
+	err = helpers.DeleteItem(helpers.NewAwsSession(r), &document.Name, *helpers.AwsConfig(r))
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("failed to delete document from s3 bucket")
 		ape.Render(w, problems.InternalError())

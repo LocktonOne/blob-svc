@@ -17,7 +17,7 @@ type CreateDocumentRequest struct {
 	Data resources.DocumentRequest `json:"data"`
 }
 
-func NewСreateDocumentRequest(r *http.Request) (resources.DocumentRequest, error) {
+func NewCreateDocumentRequest(r *http.Request) (resources.DocumentRequest, error) {
 	var request CreateDocumentRequest
 	err := r.ParseMultipartForm(1 << 32)
 	if err != nil {

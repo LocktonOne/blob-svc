@@ -28,7 +28,7 @@ func GetBlobsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = helpers.ValidateJwt(r)
+	err = helpers.Authorization(r, req.Owner)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid auth token")
 		ape.RenderErr(w, problems.Unauthorized())
