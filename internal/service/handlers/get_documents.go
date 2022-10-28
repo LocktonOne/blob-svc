@@ -14,7 +14,7 @@ import (
 func newDocumentsList(documents []data.Document, urls []string) []resources.Document {
 	result := make([]resources.Document, len(documents))
 	for i, document := range documents {
-		result[i] = newDocumentModel(document, urls[i])
+		result[i] = newDocumentModel(document)
 	}
 	return result
 }

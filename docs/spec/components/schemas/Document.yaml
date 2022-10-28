@@ -8,13 +8,11 @@ allOf:
       attributes:
         type: object
         required:
-          - url
-          - content_type
+          - content-type
         properties:
-          url:
+          content-type:
             type: string
-          content_type:
-            type: string
+            example: "application/pdf"
       relationships:
         type: object
         required:

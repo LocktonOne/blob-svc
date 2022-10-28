@@ -16,10 +16,10 @@ import (
 	"gitlab.com/tokene/blob-svc/resources"
 )
 
-func newDocumentModel(document data.Document, url string) resources.Document {
+func newDocumentModel(document data.Document) resources.Document {
 	result := resources.Document{
 		Key:           resources.NewKeyInt64(document.ID, resources.ResourceType(document.Type)),
-		Attributes:    resources.DocumentAttributes{ContentType: document.ContentType, Url: url},
+		Attributes:    resources.DocumentAttributes{ContentType: document.ContentType},
 		Relationships: resources.DocumentRelationships{Owner: resources.Relation{Data: &resources.Key{ID: document.OwnerAddress}}},
 	}
 	return result
@@ -40,7 +40,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, h, err := r.FormFile("Image")
+	file, _, err := r.FormFile("Image")
 	awsCfg := helpers.AwsConfig(r)
 
 	//Create session
@@ -50,8 +50,8 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	uploader := s3manager.NewUploader(sess)
 
 	//Check document extenstion
-	contentType := h.Header.Get("Content-Type")
-	fileExtension := strings.Split(contentType, "/")[1]
+
+	fileExtension := strings.Split(req.Attributes.ContentType, "/")[1]
 	if err := helpers.CheckFileExtension(fileExtension); err != nil {
 		helpers.Log(r).WithError(err).Debug("invalid file type")
 		ape.RenderErr(w, problems.BadRequest(err)...)
@@ -74,7 +74,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Get url
-	url, err := helpers.GetItemURL(sess, fileName, *awsCfg)
+
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot get object's url")
 		ape.Render(w, problems.InternalError())
@@ -97,7 +97,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := resources.DocumentResponse{
-		Data: newDocumentModel(document, url),
+		Data: newDocumentModel(document),
 	}
 	ape.Render(w, resp)
 }

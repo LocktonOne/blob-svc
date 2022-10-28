@@ -5,6 +5,5 @@
 package resources
 
 type DocumentAttributes struct {
-	ContentType string `json:"content_type"`
-	Url         string `json:"url"`
+	ContentType string `json:"content-type"`
 }
