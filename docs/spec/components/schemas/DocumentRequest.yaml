@@ -8,11 +8,10 @@ allOf:
       attributes:
         type: object
         required:
-          - content-type
+          - content_type
         properties:
-          content-type:
+          content_type:
             type: string
-            example: "application/pdf"
       relationships:
         type: object
         required:
@@ -26,4 +25,5 @@ allOf:
             properties:
               data:
                 $ref: '#/components/schemas/OwnerKey'
+
 

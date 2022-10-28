@@ -14,10 +14,10 @@ import (
 )
 
 type CreateDocumentRequest struct {
-	Data resources.Document `json:"data"`
+	Data resources.DocumentRequest `json:"data"`
 }
 
-func NewСreateDocumentRequest(r *http.Request) (resources.Document, error) {
+func NewСreateDocumentRequest(r *http.Request) (resources.DocumentRequest, error) {
 	var request CreateDocumentRequest
 	err := r.ParseMultipartForm(1 << 32)
 	if err != nil {
