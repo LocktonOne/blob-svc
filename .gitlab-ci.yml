@@ -96,7 +96,7 @@ pages:
   image: node:8
   stage: docs
   only:
-    - master
+    - main
   script:
     - cd docs
     - npm install
