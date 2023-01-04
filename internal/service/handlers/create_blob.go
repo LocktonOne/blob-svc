@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
@@ -33,7 +34,7 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ownerAddress := req.Relationships.Owner.Data.ID
+	ownerAddress := strings.ToLower(req.Owner)
 
 	err = helpers.Authorization(r, ownerAddress)
 	if err != nil {
@@ -44,8 +45,8 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 
 	blob := data.Blob{
 		OwnerAddress: ownerAddress,
-		BlobContent:  string([]byte(req.Attributes.Blob)),
-		Purpose:      req.Attributes.Purpose,
+		BlobContent:  string(req.Blob),
+		Purpose:      req.Purpose,
 	}
 
 	blob.ID, err = helpers.BlobsQ(r).Insert(blob)
