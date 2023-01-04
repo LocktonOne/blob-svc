@@ -14,8 +14,23 @@ post:
           properties:
             data:
               type: object
-              required: true
-              $ref: '#/components/schemas/DocumentRequest'
+              required:
+                - content_type
+                - owner
+                - type
+              properties:
+                content_type:
+                  type: string
+                  example: "application/pdf"
+                type:
+                  description: document type
+                  type: string
+                  enum:
+                    - passport
+                owner:
+                  type: string
+                  description: owner address
+                  example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'
       application/xml:
         schema:
           type: object

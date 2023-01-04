@@ -33,7 +33,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = helpers.Authorization(r, req.Relationships.Owner.Data.ID)
+	err = helpers.Authorization(r, req.Owner)
 	if err != nil {
 		helpers.Log(r).WithError(err).Debug("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
@@ -51,7 +51,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 
 	//Check document extenstion
 
-	fileExtension := strings.Split(req.Attributes.ContentType, "/")[1]
+	fileExtension := strings.Split(req.ContentType, "/")[1]
 	if err := helpers.CheckFileExtension(fileExtension); err != nil {
 		helpers.Log(r).WithError(err).Debug("invalid file type")
 		ape.RenderErr(w, problems.BadRequest(err)...)
@@ -84,8 +84,8 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	//Insert into db
 	document := data.Document{
 		Type:         string(req.Type),
-		OwnerAddress: req.Relationships.Owner.Data.ID,
-		ContentType:  req.Attributes.ContentType,
+		OwnerAddress: req.Owner,
+		ContentType:  req.ContentType,
 		Name:         fileName,
 	}
 

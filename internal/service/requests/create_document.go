@@ -2,40 +2,44 @@ package requests
 
 import (
 	"encoding/json"
+	"gitlab.com/tokene/blob-svc/resources"
 	"net/http"
 	"strings"
 
 	"gitlab.com/tokene/blob-svc/internal/types"
 
 	validation "github.com/go-ozzo/ozzo-validation"
-	"gitlab.com/tokene/blob-svc/resources"
-
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
 
 type CreateDocumentRequest struct {
-	Data resources.DocumentRequest `json:"data"`
+	ContentType string                 `json:"content_type"`
+	Owner       string                 `json:"owner"`
+	Type        resources.ResourceType `json:"type"`
 }
 
-func NewCreateDocumentRequest(r *http.Request) (resources.DocumentRequest, error) {
-	var request CreateDocumentRequest
+func NewCreateDocumentRequest(r *http.Request) (CreateDocumentRequest, error) {
+	request := struct {
+		Data CreateDocumentRequest `json:"data"`
+	}{}
+
 	err := r.ParseMultipartForm(1 << 32)
 	if err != nil {
-		return request.Data, errors.Wrap(err, "multipart limit to unmarshal")
+		return CreateDocumentRequest{}, errors.Wrap(err, "multipart limit to unmarshal")
 	}
 
 	if err := json.Unmarshal([]byte(r.FormValue("Document")), &request); err != nil {
-		return request.Data, errors.Wrap(err, "multipart limit to unmarshal")
+		return CreateDocumentRequest{}, errors.Wrap(err, "multipart limit to unmarshal")
 	}
 
-	request.Data.Relationships.Owner.Data.ID = strings.ToLower(request.Data.Relationships.Owner.Data.ID)
+	request.Data.Owner = strings.ToLower(request.Data.Owner)
 
-	return request.Data, request.validate()
+	return request.Data, request.Data.validate()
 }
 
 func (r CreateDocumentRequest) validate() error {
 	return validation.Errors{
-		"/data/type":                        validation.Validate(&r.Data.Type, validation.Required),
-		"/data/relationships/owner/data/id": validation.Validate(&r.Data.Relationships.Owner.Data.ID, validation.Required, validation.Match(types.AddressRegexp)),
+		"/data/type":                        validation.Validate(&r.Type, validation.Required),
+		"/data/relationships/owner/data/id": validation.Validate(&r.Owner, validation.Required, validation.Match(types.AddressRegexp)),
 	}.Filter()
 }
