@@ -40,7 +40,7 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 
 	session := helpers.NewAwsSession(r)
 
-	url, err := helpers.GetItemURL(session, document.Name, *helpers.AwsConfig(r))
+	url, err := helpers.GetItemURL(session, document.FileKey, *helpers.AwsConfig(r))
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get url for document")
 		ape.RenderErr(w, problems.InternalError())

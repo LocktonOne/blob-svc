@@ -37,7 +37,7 @@ func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 	urls := make([]string, len(documents))
 
 	for i, document := range documents {
-		urls[i], err = helpers.GetItemURL(session, document.Name, *helpers.AwsConfig(r))
+		urls[i], err = helpers.GetItemURL(session, document.FileKey, *helpers.AwsConfig(r))
 		if err != nil {
 			helpers.Log(r).WithError(err).Error("failed to get url for document")
 			ape.RenderErr(w, problems.InternalError())
