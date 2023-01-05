@@ -6,8 +6,7 @@ package resources
 
 type DocumentRequest struct {
 	Key
-	Attributes    DocumentRequestAttributes    `json:"attributes"`
-	Relationships DocumentRequestRelationships `json:"relationships"`
+	Attributes DocumentRequestAttributes `json:"attributes"`
 }
 type DocumentRequestResponse struct {
 	Data     DocumentRequest `json:"data"`

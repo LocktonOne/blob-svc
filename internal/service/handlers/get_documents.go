@@ -11,16 +11,7 @@ import (
 	"gitlab.com/tokene/blob-svc/resources"
 )
 
-func newDocumentsList(documents []data.Document, urls []string) []resources.Document {
-	result := make([]resources.Document, len(documents))
-	for i, document := range documents {
-		result[i] = newDocumentModel(document)
-	}
-	return result
-}
-
 func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
-
 	req, err := requests.NewGetDocumentsListRequest(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to parse request")
@@ -59,4 +50,12 @@ func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ape.Render(w, result)
+}
+
+func newDocumentsList(documents []data.Document, urls []string) []resources.Document {
+	result := make([]resources.Document, len(documents))
+	for i, document := range documents {
+		result[i] = newDocumentModel(document, urls[i])
+	}
+	return result
 }

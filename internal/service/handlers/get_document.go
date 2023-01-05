@@ -12,7 +12,6 @@ import (
 )
 
 func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
-
 	req, err := requests.NewGetDocumentID(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("invalid request")
@@ -39,8 +38,17 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session := helpers.NewAwsSession(r)
+
+	url, err := helpers.GetItemURL(session, document.Name, *helpers.AwsConfig(r))
+	if err != nil {
+		helpers.Log(r).WithError(err).Error("failed to get url for document")
+		ape.Render(w, problems.InternalError())
+		return
+	}
+
 	result := resources.DocumentResponse{
-		Data: newDocumentModel(*document),
+		Data: newDocumentModel(*document, url),
 	}
 
 	ape.Render(w, result)

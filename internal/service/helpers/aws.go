@@ -11,7 +11,7 @@ import (
 	"gitlab.com/tokene/blob-svc/internal/config"
 )
 
-var AlowedFileExtensions = []string{"png", "jpg", "jpeg", "bmp"}
+var AllowedFileExtensions = []string{"png", "jpg", "jpeg", "bmp"}
 
 func NewAwsSession(r *http.Request) *session.Session {
 	awsCfg := AwsConfig(r)
@@ -56,7 +56,7 @@ func DeleteItem(sess *session.Session, item *string, cfg config.AWSConfig) error
 	return nil
 }
 func CheckFileExtension(ext string) error {
-	for _, el := range AlowedFileExtensions {
+	for _, el := range AllowedFileExtensions {
 		if el == ext {
 			return nil
 		}

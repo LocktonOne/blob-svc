@@ -16,15 +16,6 @@ import (
 	"gitlab.com/tokene/blob-svc/resources"
 )
 
-func newDocumentModel(document data.Document) resources.Document {
-	result := resources.Document{
-		Key:           resources.NewKeyInt64(document.ID, resources.ResourceType(document.Type)),
-		Attributes:    resources.DocumentAttributes{ContentType: document.ContentType},
-		Relationships: resources.DocumentRelationships{Owner: resources.Relation{Data: &resources.Key{ID: document.OwnerAddress}}},
-	}
-	return result
-}
-
 func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewCreateDocumentRequest(r)
 	if err != nil {
@@ -33,25 +24,25 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = helpers.Authorization(r, req.Relationships.Owner.Data.ID)
+	owner, err := helpers.ValidateJwt(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Debug("user does not have permission")
 		ape.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
-	file, _, err := r.FormFile("Image")
+	file, _, err := r.FormFile("Document")
 	awsCfg := helpers.AwsConfig(r)
 
 	//Create session
 	sess := helpers.NewAwsSession(r)
 
-	//Create updloader
+	//Create uploader
 	uploader := s3manager.NewUploader(sess)
 
-	//Check document extenstion
+	//Check document extension
 
-	fileExtension := strings.Split(req.Attributes.ContentType, "/")[1]
+	fileExtension := strings.Split(req.MimeType, "/")[1]
 	if err := helpers.CheckFileExtension(fileExtension); err != nil {
 		helpers.Log(r).WithError(err).Debug("invalid file type")
 		ape.RenderErr(w, problems.BadRequest(err)...)
@@ -74,7 +65,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Get url
-
+	url, err := helpers.GetItemURL(sess, fileName, *helpers.AwsConfig(r))
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot get object's url")
 		ape.Render(w, problems.InternalError())
@@ -83,10 +74,10 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 
 	//Insert into db
 	document := data.Document{
-		Type:         string(req.Type),
-		OwnerAddress: req.Relationships.Owner.Data.ID,
-		ContentType:  req.Attributes.ContentType,
-		Name:         fileName,
+		Name:         req.Name,
+		OwnerAddress: owner,
+		MimeType:     req.MimeType,
+		FileKey:      fileName,
 	}
 
 	document.ID, err = helpers.DocumentsQ(r).Insert(document)
@@ -97,7 +88,20 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := resources.DocumentResponse{
-		Data: newDocumentModel(document),
+		Data: newDocumentModel(document, url),
 	}
 	ape.Render(w, resp)
+}
+
+func newDocumentModel(document data.Document, url string) resources.Document {
+	result := resources.Document{
+		Key: resources.NewKeyInt64(document.ID, resources.DOCUMENT),
+		Attributes: resources.DocumentAttributes{
+			MimeType: document.MimeType,
+			Name:     document.Name,
+			Link:     url,
+			Owner:    document.OwnerAddress,
+		},
+	}
+	return result
 }
