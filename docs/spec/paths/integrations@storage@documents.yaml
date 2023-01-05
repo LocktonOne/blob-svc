@@ -6,23 +6,29 @@ post:
   operationId: uploadDocument
   requestBody:
     content:
-      application/json:
+      multipart/form-data:
         schema:
           type: object
-          required:
-            - data
           properties:
-            data:
+            Metadata:
               type: object
               required:
-                - mime_type
-                - name
+                - data
               properties:
-                mime_type:
-                  type: string
-                  example: "application/pdf"
-                name:
-                  type: string
+                data:
+                  type: object
+                  required:
+                    - mime_type
+                    - name
+                  properties:
+                    mime_type:
+                      type: string
+                      example: "application/pdf"
+                    name:
+                      type: string
+            Document:
+              type: string
+              format: binary
     description: Upload document
     required: true
 
