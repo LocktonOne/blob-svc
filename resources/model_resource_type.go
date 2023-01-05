@@ -9,5 +9,5 @@ type ResourceType string
 // List of ResourceType
 const (
 	BLOB     ResourceType = "blob"
-	PASSPORT ResourceType = "passport"
+	DOCUMENT ResourceType = "document"
 )

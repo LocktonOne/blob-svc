@@ -6,4 +6,4 @@ properties:
     description: document type
     type: string
     enum:
-      - passport
+      - document

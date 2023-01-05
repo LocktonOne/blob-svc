@@ -19,8 +19,8 @@ type DocumentsQ interface {
 
 type Document struct {
 	ID           int64  `db:"id" structs:"-"`
-	Type         string `db:"type" structs:"type"`
-	OwnerAddress string `db:"owner_address" structs:"owner_address"`
 	Name         string `db:"name" structs:"name"`
-	ContentType  string `db:"content_type" structs:"content_type"`
+	OwnerAddress string `db:"owner_address" structs:"owner_address"`
+	FileKey      string `db:"file_key" structs:"file_key"`
+	MimeType     string `db:"mime_type" structs:"mime_type"`
 }

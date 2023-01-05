@@ -8,22 +8,18 @@ allOf:
       attributes:
         type: object
         required:
-          - content-type
-        properties:
-          content-type:
-            type: string
-            example: "application/pdf"
-      relationships:
-        type: object
-        required:
+          - mime_type
+          - name
+          - link
           - owner
         properties:
+          mime_type:
+            type: string
+            example: "application/pdf"
+          name:
+            type: string
+          link:
+            type: string
           owner:
-            type: object
-            required:
-              - data
-            description: Document owner
-            properties:
-              data:
-                $ref: '#/components/schemas/OwnerKey'
+            type: string
 
