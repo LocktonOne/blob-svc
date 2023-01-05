@@ -60,7 +60,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot upload file")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -68,7 +68,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	url, err := helpers.GetItemURL(sess, fileName, *helpers.AwsConfig(r))
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot get object's url")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -83,7 +83,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) {
 	document.ID, err = helpers.DocumentsQ(r).Insert(document)
 	if err != nil {
 		helpers.Log(r).WithError(err).Info("cannot insert document to db")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 

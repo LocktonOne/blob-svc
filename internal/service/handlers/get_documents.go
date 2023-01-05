@@ -15,7 +15,7 @@ func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewGetDocumentsListRequest(r)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to parse request")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
@@ -29,7 +29,7 @@ func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 	documents, err := helpers.DocumentsQ(r).FilterByAddress(req.Owner).Select()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get blobs from DB")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -40,7 +40,7 @@ func GetDocumentsByOwnerAddress(w http.ResponseWriter, r *http.Request) {
 		urls[i], err = helpers.GetItemURL(session, document.Name, *helpers.AwsConfig(r))
 		if err != nil {
 			helpers.Log(r).WithError(err).Error("failed to get url for document")
-			ape.Render(w, problems.InternalError())
+			ape.RenderErr(w, problems.InternalError())
 			return
 		}
 	}

@@ -52,7 +52,7 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 	blob.ID, err = helpers.BlobsQ(r).Insert(blob)
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to create blob in DB")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 

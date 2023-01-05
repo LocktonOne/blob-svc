@@ -22,12 +22,12 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 	document, err := helpers.DocumentsQ(r).FilterByID(req.ID).Get()
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get document from DB")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	if document == nil {
-		ape.Render(w, problems.NotFound())
+		ape.RenderErr(w, problems.NotFound())
 		return
 	}
 
@@ -43,7 +43,7 @@ func GetDocumentByID(w http.ResponseWriter, r *http.Request) {
 	url, err := helpers.GetItemURL(session, document.Name, *helpers.AwsConfig(r))
 	if err != nil {
 		helpers.Log(r).WithError(err).Error("failed to get url for document")
-		ape.Render(w, problems.InternalError())
+		ape.RenderErr(w, problems.InternalError())
 		return
 	}
 
