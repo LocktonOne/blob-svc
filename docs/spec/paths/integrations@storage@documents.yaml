@@ -1,9 +1,9 @@
 post:
   tags:
     - Documents
-  summary: Upload Policy
-  description: "Get upload policy.\n\n\U0001F512 An admin's signature is needed\n"
-  operationId: getUploadPolicy
+  summary: Upload Document
+  description: "Upload document.\n\n\U0001F512\n"
+  operationId: uploadDocument
   requestBody:
     content:
       application/json:
@@ -15,31 +15,15 @@ post:
             data:
               type: object
               required:
-                - content_type
-                - owner
-                - type
+                - mime_type
+                - name
               properties:
-                content_type:
+                mime_type:
                   type: string
                   example: "application/pdf"
-                type:
-                  description: document type
+                name:
                   type: string
-                  enum:
-                    - passport
-                owner:
-                  type: string
-                  description: owner address
-                  example: '0x750Bd531CEA1f68418DDF2373193CfbD86A69058'
-      application/xml:
-        schema:
-          type: object
-          properties:
-            data:
-              type: object
-              required: true
-              $ref: '#/components/schemas/DocumentRequest'
-    description: Get Upload Policy
+    description: Upload document
     required: true
 
   responses:
